@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIF Merkle - Token Release Platform</title>
+    <title>AIF Merkle - 代币释放平台</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -12,6 +12,8 @@
             --primary: #3498db;
             --secondary: #8e44ad;
             --accent: #00ff9d;
+            --trust-green: #27ae60;
+            --warning: #f39c12;
         }
         
         body {
@@ -167,6 +169,15 @@
             border-radius: 12px;
             padding: 1.5rem;
             margin: 1.5rem 0;
+        }
+        
+        .trust-box {
+            background: rgba(39, 174, 96, 0.1);
+            border: 2px solid var(--trust-green);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.2);
         }
         
         .warning-box {
@@ -365,6 +376,229 @@
             margin: 2rem 0;
         }
         
+        /* 新添加的信任流程样式 */
+        .trust-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .trust-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--trust-green);
+        }
+        
+        .trust-step-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(39, 174, 96, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--trust-green);
+            flex-shrink: 0;
+        }
+        
+        .trust-step-content h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--trust-green);
+        }
+        
+        .merkle-explanation {
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .merkle-explanation h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .merkle-explanation ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .merkle-explanation li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .merkle-explanation li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--trust-green);
+            font-weight: bold;
+        }
+        
+        .rules-highlight {
+            background: rgba(243, 156, 18, 0.1);
+            border: 2px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.2);
+        }
+        
+        .rules-highlight h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 合约详情样式 */
+        .contract-details {
+            background: rgba(26, 32, 44, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid rgba(0, 255, 157, 0.3);
+        }
+        
+        .contract-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .contract-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .contract-status {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .contract-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .contract-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .contract-item-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+        }
+        
+        .contract-item-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .vesting-chart {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin: 1.5rem 0;
+        }
+        
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            margin: 0 2px;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+        
+        .chart-bar.initial {
+            background: linear-gradient(to top, var(--accent), var(--primary));
+        }
+        
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .contract-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .contract-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .contract-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .contract-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .contract-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 255, 157, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+        
         /* 移動端 */
         .mobile-menu {
             position: fixed;
@@ -472,6 +706,23 @@
             .payment-amount {
                 font-size: 1.5rem;
             }
+            
+            .trust-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contract-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contract-table {
+                font-size: 0.9rem;
+            }
+            
+            .contract-table th, .contract-table td {
+                padding: 0.75rem 0.5rem;
+            }
         }
         
         .mobile-lang-toggle {
@@ -506,8 +757,10 @@
             <div class="hidden md:flex space-x-8 desktop-nav">
                 <a href="#overview" class="hover:text-blue-400 transition lang-zh">平台說明</a>
                 <a href="#overview" class="hover:text-blue-400 transition lang-en active">Overview</a>
-                <a href="#rules" class="hover:text-blue-400 transition lang-zh">釋放規則</a>
-                <a href="#rules" class="hover:text-blue-400 transition lang-en active">Release Rules</a>
+                <a href="#contract" class="hover:text-blue-400 transition lang-zh">合約詳情</a>
+                <a href="#contract" class="hover:text-blue-400 transition lang-en active">Contract Details</a>
+                <a href="#trust-process" class="hover:text-blue-400 transition lang-zh">信任流程</a>
+                <a href="#trust-process" class="hover:text-blue-400 transition lang-en active">Trust Process</a>
                 <a href="#purchase" class="hover:text-blue-400 transition lang-zh">購買流程</a>
                 <a href="#purchase" class="hover:text-blue-400 transition lang-en active">Purchase Process</a>
                 <a href="#claim" class="hover:text-blue-400 transition lang-zh">領取代幣</a>
@@ -541,8 +794,10 @@
         <div class="mobile-menu-content">
             <a href="#overview" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">平台說明</a>
             <a href="#overview" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Overview</a>
-            <a href="#rules" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">釋放規則</a>
-            <a href="#rules" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Release Rules</a>
+            <a href="#contract" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">合約詳情</a>
+            <a href="#contract" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Contract Details</a>
+            <a href="#trust-process" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">信任流程</a>
+            <a href="#trust-process" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Trust Process</a>
             <a href="#purchase" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">購買流程</a>
             <a href="#purchase" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Purchase Process</a>
             <a href="#claim" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">領取代幣</a>
@@ -775,34 +1030,264 @@
         </div>
     </section>
 
-    <!-- 釋放規則 - 此处省略了详细的时间轴内容，已在之前的代码中包含 -->
-    <section class="py-20 px-4 bg-black bg-opacity-30" id="rules">
+    <!-- 合約詳情 -->
+    <section class="py-20 px-4 bg-black bg-opacity-30" id="contract">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="gradient-text lang-zh">智能合約詳情</span>
+                    <span class="gradient-text lang-en active">Smart Contract Details</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto lang-zh">
+                    不可更改、不可取消、不可轉讓的智能合約，保障您的代幣釋放權益
+                </p>
+                <p class="text-gray-400 max-w-2xl mx-auto lang-en active">
+                    Immutable, non-cancellable, non-transferable smart contract to protect your token release rights
+                </p>
+            </div>
+
+            <div class="contract-details">
+                <div class="contract-header">
+                    <div class="contract-title lang-zh">代幣釋放合約</div>
+                    <div class="contract-title lang-en active">Token Release Contract</div>
+                    <div class="contract-status lang-zh">不可更改</div>
+                    <div class="contract-status lang-en active">Immutable</div>
+                </div>
+
+                <div class="contract-grid">
+                    <div class="contract-item">
+                        <div class="contract-item-label lang-zh">合約類型</div>
+                        <div class="contract-item-label lang-en active">Contract Type</div>
+                        <div class="contract-item-value lang-zh">線性釋放</div>
+                        <div class="contract-item-value lang-en active">Linear Vesting</div>
+                    </div>
+                    <div class="contract-item">
+                        <div class="contract-item-label lang-zh">總金額</div>
+                        <div class="contract-item-label lang-en active">Total Amount</div>
+                        <div class="contract-item-value">10,000 AIF</div>
+                    </div>
+                    <div class="contract-item">
+                        <div class="contract-item-label lang-zh">開始日期</div>
+                        <div class="contract-item-label lang-en active">Start Date</div>
+                        <div class="contract-item-value">2026年6月3日</div>
+                    </div>
+                    <div class="contract-item">
+                        <div class="contract-item-label lang-zh">結束日期</div>
+                        <div class="contract-item-label lang-en active">End Date</div>
+                        <div class="contract-item-value">2027年6月2日</div>
+                    </div>
+                    <div class="contract-item">
+                        <div class="contract-item-label lang-zh">釋放期</div>
+                        <div class="contract-item-label lang-en active">Vesting Duration</div>
+                        <div class="contract-item-value">12 個月</div>
+                    </div>
+                    <div class="contract-item">
+                        <div class="contract-item-label lang-zh">釋放頻率</div>
+                        <div class="contract-item-label lang-en active">Release Frequency</div>
+                        <div class="contract-item-value lang-zh">每日</div>
+                        <div class="contract-item-value lang-en active">Daily</div>
+                    </div>
+                </div>
+
+                <div class="vesting-chart">
+                    <h3 class="text-xl font-bold mb-4 text-center lang-zh">釋放計劃圖表</h3>
+                    <h3 class="text-xl font-bold mb-4 text-center lang-en active">Vesting Schedule Chart</h3>
+                    
+                    <div class="chart-container">
+                        <div class="chart-line">
+                            <div class="chart-bar initial" style="height: 10%"></div>
+                            <div class="chart-bar" style="height: 90%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-labels">
+                        <div class="lang-zh">初始分配 10%</div>
+                        <div class="lang-en active">Initial Allocation 10%</div>
+                        <div class="lang-zh">線性釋放 90%</div>
+                        <div class="lang-en active">Linear Vesting 90%</div>
+                    </div>
+                </div>
+
+                <table class="contract-table">
+                    <thead>
+                        <tr>
+                            <th class="lang-zh">項目</th>
+                            <th class="lang-en active">Item</th>
+                            <th class="lang-zh">詳細信息</th>
+                            <th class="lang-en active">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="lang-zh">初始分配</td>
+                            <td class="lang-en active">Initial Allocation</td>
+                            <td>2026年3月3日 00:00 AM</td>
+                        </tr>
+                        <tr>
+                            <td class="lang-zh">初始分配金額</td>
+                            <td class="lang-en active">Initial Allocation Amount</td>
+                            <td>10%</td>
+                        </tr>
+                        <tr>
+                            <td class="lang-zh">接收者數量</td>
+                            <td class="lang-en active">Number of Recipients</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td class="lang-zh">是否上市銷售</td>
+                            <td class="lang-en active">Listed for Sale</td>
+                            <td class="lang-zh">否</td>
+                            <td class="lang-en active">No</td>
+                        </tr>
+                        <tr>
+                            <td class="lang-zh">自動領取</td>
+                            <td class="lang-en active">Auto-Claim</td>
+                            <td class="lang-zh">禁用</td>
+                            <td class="lang-en active">Disabled</td>
+                        </tr>
+                        <tr>
+                            <td class="lang-zh">誰可以取消合約</td>
+                            <td class="lang-en active">Who Can Cancel the Contract</td>
+                            <td class="lang-zh">雙方都不能</td>
+                            <td class="lang-en active">Neither</td>
+                        </tr>
+                        <tr>
+                            <td class="lang-zh">誰可以更改接收者</td>
+                            <td class="lang-en active">Who Can Change the Recipient</td>
+                            <td class="lang-zh">雙方都不能</td>
+                            <td class="lang-en active">Neither</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="contract-note">
+                    <p class="lang-zh">
+                        <strong>重要提示：</strong> 此合約是不可變的，既不能取消也不能轉讓。您的代幣釋放權益通過智能合約在區塊鏈上永久保障。
+                    </p>
+                    <p class="lang-en active">
+                        <strong>Important Note:</strong> This contract is immutable and can neither be canceled nor transferred. Your token release rights are permanently protected on the blockchain through smart contracts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 信任流程 -->
+    <section class="py-20 px-4" id="trust-process">
         <div class="container mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                    <span class="gradient-text lang-zh">代幣釋放規則</span>
-                    <span class="gradient-text lang-en active">Token Release Rules</span>
+                    <span class="gradient-text lang-zh">信任流程</span>
+                    <span class="gradient-text lang-en active">Trust Process</span>
                 </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto lang-zh">
+                    完整的支付确认与代币释放流程，确保您的权益得到保障
+                </p>
+                <p class="text-gray-400 max-w-2xl mx-auto lang-en active">
+                    Complete payment confirmation and token release process to ensure your rights are protected
+                </p>
             </div>
-            <!-- 规则内容省略以节省空间 -->
-            <div class="warning-box max-w-6xl mx-auto text-center">
-                <div class="flex items-center justify-center mb-3">
-                    <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mr-3"></i>
-                    <h5 class="font-bold lang-zh">重要提醒</h5>
-                    <h5 class="font-bold lang-en active">Important Reminder</h5>
+
+            <div class="trust-flow max-w-4xl mx-auto">
+                <div class="trust-step">
+                    <div class="trust-step-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="trust-step-content">
+                        <h4 class="lang-zh">1. 完成支付</h4>
+                        <h4 class="lang-en active">1. Complete Payment</h4>
+                        <p class="text-gray-300 lang-zh">
+                            选择适合您的支付方式完成购买，保存好支付凭证截图。
+                        </p>
+                        <p class="text-gray-300 lang-en active">
+                            Choose your preferred payment method to complete the purchase and save the payment receipt screenshot.
+                        </p>
+                    </div>
                 </div>
-                <ul class="text-sm text-gray-300 space-y-1 text-left max-w-3xl mx-auto">
-                    <li class="lang-zh">• 釋放期間未領取的代幣將累積，可隨時登錄領取</li>
-                    <li class="lang-en active">• Unclaimed tokens will accumulate</li>
-                    <li class="lang-zh">• 請妥善保管錢包私鑰</li>
-                    <li class="lang-en active">• Keep wallet private key safe</li>
-                </ul>
+                
+                <div class="trust-step">
+                    <div class="trust-step-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="trust-step-content">
+                        <h4 class="lang-zh">2. 发送确认邮件</h4>
+                        <h4 class="lang-en active">2. Send Confirmation Email</h4>
+                        <p class="text-gray-300 lang-zh">
+                            将支付凭证截图和您的Solana钱包地址发送至官方邮箱：<strong>genesis@aif.market</strong>
+                        </p>
+                        <p class="text-gray-300 lang-en active">
+                            Send the payment receipt screenshot and your Solana wallet address to the official email: <strong>genesis@aif.market</strong>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="trust-step">
+                    <div class="trust-step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="trust-step-content">
+                        <h4 class="lang-zh">3. 收到确认邮件</h4>
+                        <h4 class="lang-en active">3. Receive Confirmation Email</h4>
+                        <p class="text-gray-300 lang-zh">
+                            您将在24小时内收到官方确认邮件和收款凭证，确认您的购买已成功记录。
+                        </p>
+                        <p class="text-gray-300 lang-en active">
+                            You will receive an official confirmation email and payment receipt within 24 hours, confirming your purchase has been successfully recorded.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="trust-step">
+                    <div class="trust-step-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="trust-step-content">
+                        <h4 class="lang-zh">4. 添加至AIF Merkle库</h4>
+                        <h4 class="lang-en active">4. Added to AIF Merkle Library</h4>
+                        <p class="text-gray-300 lang-zh">
+                            您的钱包地址和邮箱将被添加到AIF Merkle库中，这是一个在Solana区块链上不可修改、不可撤销的智能合约名单库。
+                        </p>
+                        <p class="text-gray-300 lang-en active">
+                            Your wallet address and email will be added to the AIF Merkle library, an unmodifiable and irrevocable smart contract list on the Solana blockchain.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="trust-step">
+                    <div class="trust-step-icon">
+                        <i class="fas fa-unlock"></i>
+                    </div>
+                    <div class="trust-step-content">
+                        <h4 class="lang-zh">5. 等待代币释放</h4>
+                        <h4 class="lang-en active">5. Wait for Token Release</h4>
+                        <p class="text-gray-300 lang-zh">
+                            在2026年3月3日开池后，您可以通过钱包登录AIF Merkle官网领取您的代币。
+                        </p>
+                        <p class="text-gray-300 lang-en active">
+                            After the pool opens on March 3, 2026, you can log in to the AIF Merkle official website with your wallet to claim your tokens.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trust-box max-w-4xl mx-auto">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-shield-alt text-2xl mr-3" style="color: var(--trust-green);"></i>
+                    <h3 class="text-lg font-bold" style="color: var(--trust-green);" class="lang-zh">信任保障</h3>
+                    <h3 class="text-lg font-bold" style="color: var(--trust-green);" class="lang-en active">Trust Assurance</h3>
+                </div>
+                <p class="text-gray-200 lang-zh">
+                    在整个流程中，您将收到官方的确认邮件和收款凭证，确保您的购买已被正确记录。您的权益通过AIF Merkle库在Solana区块链上得到永久保障。
+                </p>
+                <p class="text-gray-200 lang-en active">
+                    Throughout the process, you will receive official confirmation emails and payment receipts to ensure your purchase has been correctly recorded. Your rights are permanently protected on the Solana blockchain through the AIF Merkle library.
+                </p>
             </div>
         </div>
     </section>
 
     <!-- 購買流程 -->
-    <section class="py-20 px-4" id="purchase">
+    <section class="py-20 px-4 bg-black bg-opacity-30" id="purchase">
         <div class="container mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
@@ -879,7 +1364,7 @@
     </section>
 
     <!-- 領取代幣 -->
-    <section class="py-20 px-4 bg-black bg-opacity-30" id="claim">
+    <section class="py-20 px-4" id="claim">
         <div class="container mx-auto max-w-4xl">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
@@ -896,6 +1381,11 @@
                     <span class="lang-zh">連接錢包領取</span>
                     <span class="lang-en active">Connect Wallet to Claim</span>
                 </button>
+                
+                <div class="mt-6 text-gray-400 max-w-2xl mx-auto">
+                    <p class="lang-zh">在2026年3月3日开池后，您可以通过连接钱包登录AIF Merkle平台领取您的代币。</p>
+                    <p class="lang-en active">After the pool opens on March 3, 2026, you can log in to the AIF Merkle platform by connecting your wallet to claim your tokens.</p>
+                </div>
             </div>
         </div>
     </section>
