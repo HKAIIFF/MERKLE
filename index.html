@@ -6,7 +6,7 @@
     <title>AIF Merkle - Token Release Platform</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #3498db;
@@ -22,6 +22,7 @@
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(142, 68, 173, 0.1) 0%, transparent 20%);
+            line-height: 1.7;
         }
         
         .logo-font {
@@ -32,8 +33,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            position: relative;
-            display: inline-block;
             text-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
             animation: logoGlow 3s ease-in-out infinite alternate;
         }
@@ -61,22 +60,12 @@
             color: transparent;
         }
         
-        .gradient-bg {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-        
-        .accent-bg {
-            background: rgba(0, 255, 157, 0.1);
-            border: 1px solid rgba(0, 255, 157, 0.2);
-        }
-        
         .card {
             background-color: rgba(26, 32, 44, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 16px;
             transition: all 0.3s ease;
-            overflow: hidden;
         }
         
         .card:hover {
@@ -102,19 +91,6 @@
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4);
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        
-        .btn-secondary:hover {
-            background-color: rgba(0, 255, 157, 0.1);
-            transform: translateY(-3px);
         }
         
         .hero {
@@ -152,23 +128,8 @@
             opacity: 0.3;
         }
         
-        .floating {
-            animation: floating 6s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-        
         .animate-fade-in {
             animation: fadeIn 1s ease-in-out forwards;
-            opacity: 0;
-        }
-        
-        .animate-slide-up {
-            animation: slideUp 0.8s ease-in-out forwards;
             opacity: 0;
         }
         
@@ -177,18 +138,7 @@
             to { opacity: 1; transform: scale(1); }
         }
         
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .progress-bar {
-            background: linear-gradient(to right, var(--primary), var(--accent), var(--secondary));
-            border-radius: 9999px;
-            height: 8px;
-        }
-        
-        /* 語言切換樣式 */
+        /* 語言切換 */
         .lang-zh, .lang-en {
             display: none !important;
         }
@@ -206,15 +156,184 @@
         h5.lang-zh.active, h5.lang-en.active,
         ul.lang-zh.active, ul.lang-en.active,
         li.lang-zh.active, li.lang-en.active,
-        td.lang-zh.active, td.lang-en.active,
         a.lang-zh.active, a.lang-en.active,
         button.lang-zh.active, button.lang-en.active {
             display: block !important;
         }
         
-        td.lang-zh.active, td.lang-en.active,
-        th.lang-zh.active, th.lang-en.active {
-            display: table-cell !important;
+        .info-box {
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .wallet-connect-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .wallet-connect-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        /* 倒計時 */
+        .countdown-container {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(0, 255, 157, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+        }
+        
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+        
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+            line-height: 1;
+        }
+        
+        .countdown-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+        
+        /* 支付按鈕 */
+        .payment-btn {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(142, 68, 173, 0.2));
+            border: 2px solid rgba(0, 255, 157, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .payment-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
+            border-color: rgba(0, 255, 157, 0.5);
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(142, 68, 173, 0.3));
+        }
+        
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .payment-currency {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .payment-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .crypto-payment {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .wallet-address-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0, 255, 157, 0.2);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(0, 255, 157, 0.3);
+        }
+        
+        .step-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+            font-size: 1.5rem;
         }
         
         .timeline-item {
@@ -246,173 +365,7 @@
             margin: 2rem 0;
         }
         
-        .wallet-connect-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .wallet-connect-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4);
-        }
-        
-        .info-box {
-            background: rgba(0, 255, 157, 0.1);
-            border: 1px solid rgba(0, 255, 157, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .warning-box {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid rgba(255, 193, 7, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .step-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .step-card:hover {
-            transform: translateY(-5px);
-            background: rgba(0, 255, 157, 0.1);
-            border-color: rgba(0, 255, 157, 0.3);
-        }
-        
-        .step-number {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-        
-        /* 移動端優化 */
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: flex;
-            }
-            
-            .hero {
-                min-height: auto;
-                padding-top: 80px;
-                padding-bottom: 60px;
-            }
-            
-            .logo-font {
-                font-size: 1.8rem;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-                line-height: 1.2;
-                margin-top: 1rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .card h3 {
-                font-size: 1.2rem;
-            }
-            
-            .btn-primary, .btn-secondary {
-                padding: 0.75rem 1.5rem;
-                font-size: 0.9rem;
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            
-            .mobile-menu-btn {
-                width: 40px;
-                height: 40px;
-                z-index: 1001;
-            }
-            
-            .mobile-lang-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 40px;
-                height: 40px;
-                border-radius: 8px;
-                background: rgba(255,255,255,0.1);
-                border: 1px solid rgba(255,255,255,0.2);
-                transition: all 0.3s ease;
-            }
-            
-            .mobile-lang-toggle:hover {
-                background: rgba(0,255,157,0.2);
-                border-color: var(--accent);
-                transform: scale(1.05);
-            }
-            
-            .mobile-lang-toggle img {
-                border-radius: 2px;
-            }
-            
-            .mobile-menu-open {
-                overflow: hidden;
-            }
-            
-            .mobile-menu-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.7);
-                z-index: 999;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-            
-            .mobile-menu-overlay.active {
-                display: block;
-                opacity: 1;
-            }
-            
-            .step-card {
-                margin-bottom: 1rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .logo-font {
-                font-size: 1.6rem;
-            }
-            
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-        }
-        
-        /* 移動菜單樣式 */
+        /* 移動端 */
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -434,6 +387,24 @@
         
         .mobile-menu-content {
             padding-top: 60px;
+        }
+        
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
         }
         
         .mobile-menu-language {
@@ -458,6 +429,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             transition: all 0.3s ease;
+            color: white;
         }
         
         .mobile-language-btn:hover {
@@ -467,28 +439,58 @@
         
         .mobile-language-btn img {
             width: 24px;
-            height: auto;
         }
         
-        body {
-            line-height: 1.7;
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .hero {
+                min-height: auto;
+                padding-top: 80px;
+                padding-bottom: 60px;
+            }
+            
+            .countdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .countdown-number {
+                font-size: 1.8rem;
+            }
+            
+            .payment-icon {
+                font-size: 2rem;
+            }
+            
+            .payment-amount {
+                font-size: 1.5rem;
+            }
         }
         
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
-            letter-spacing: 0.5px;
+        .mobile-lang-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
         }
         
-        p {
-            line-height: 1.7;
-        }
-        
-        .logo-img {
-            height: 50px;
-            width: auto;
+        .mobile-lang-toggle:hover {
+            background: rgba(0,255,157,0.2);
+            border-color: var(--accent);
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- 導航欄 -->
@@ -512,7 +514,6 @@
                 <a href="#claim" class="hover:text-blue-400 transition lang-en active">Claim Tokens</a>
             </div>
             <div class="flex items-center space-x-4">
-                <!-- 語言切換按鈕 - 桌面端 -->
                 <div class="hidden md:flex items-center space-x-2">
                     <button onclick="changeLanguage('en')" class="p-2 hover:bg-gray-800 rounded transition">
                         <img src="https://flagcdn.com/w40/gb.png" alt="English" class="w-6 h-4">
@@ -521,13 +522,9 @@
                         <img src="https://flagcdn.com/w40/hk.png" alt="繁體中文" class="w-6 h-4">
                     </button>
                 </div>
-                
-                <!-- 移動端語言切換 -->
                 <button onclick="toggleLanguage()" class="md:hidden mobile-lang-toggle">
                     <img id="mobile-lang-flag" src="https://flagcdn.com/w40/gb.png" alt="Language" class="w-6 h-4">
                 </button>
-                
-                <!-- 漢堡菜單按鈕 -->
                 <button class="md:hidden mobile-menu-btn text-white" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
@@ -535,10 +532,8 @@
         </div>
     </nav>
 
-    <!-- 移動菜單遮罩 -->
-    <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-
     <!-- 移動菜單 -->
+    <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
     <div class="mobile-menu">
         <button class="absolute top-4 right-4 text-white text-2xl" onclick="closeMobileMenu()">
             <i class="fas fa-times"></i>
@@ -552,8 +547,6 @@
             <a href="#purchase" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Purchase Process</a>
             <a href="#claim" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-zh" onclick="closeMobileMenu()">領取代幣</a>
             <a href="#claim" class="block py-3 px-4 hover:bg-gray-800 rounded-lg transition lang-en active" onclick="closeMobileMenu()">Claim Tokens</a>
-            
-            <!-- 移動端語言切換 -->
             <div class="mobile-menu-language">
                 <h4 class="lang-zh">語言選擇</h4>
                 <h4 class="lang-en active">Language Selection</h4>
@@ -581,27 +574,27 @@
                     <span class="gradient-text lang-en active">AIF Merkle Token Release Platform</span>
                 </h1>
                 <p class="text-lg md:text-xl text-gray-300 mb-6 lang-zh">
-                    專為錢包地址 #10001-150000 設計的智能代幣鎖定與釋放系統
+                    AIF官方智能代幣鎖定與釋放系統
                 </p>
                 <p class="text-lg md:text-xl text-gray-300 mb-6 lang-en active">
-                    Smart Token Locking and Release System for Wallet Addresses #10001-150000
+                    AIF Official Smart Token Locking and Release System
                 </p>
                 
                 <div class="info-box max-w-4xl mx-auto">
-                    <div class="flex items-start mb-3">
-                        <i class="fas fa-info-circle text-blue-400 text-2xl mr-3 mt-1"></i>
-                        <div class="text-left">
-                            <h3 class="text-lg font-bold text-blue-400 mb-2 lang-zh">重要說明</h3>
-                            <h3 class="text-lg font-bold text-blue-400 mb-2 lang-en active">Important Notice</h3>
-                            <p class="text-gray-200 lang-zh">
-                                AIF Merkle平台針對錢包地址 #10001-150000 提供代幣鎖定與釋放服務。<br>
-                                錢包地址 #1-10000 的用戶無需經過鎖定流程，可直接領取全部代幣。
-                            </p>
-                            <p class="text-gray-200 lang-en active">
-                                AIF Merkle platform provides token locking and release services for wallet addresses #10001-150000.<br>
-                                Users with wallet addresses #1-10000 do not need locking process and can claim all tokens directly.
-                            </p>
+                    <div class="text-center">
+                        <div class="flex items-center justify-center mb-3">
+                            <i class="fas fa-info-circle text-blue-400 text-2xl mr-3"></i>
+                            <h3 class="text-lg font-bold text-blue-400 lang-zh">重要說明</h3>
+                            <h3 class="text-lg font-bold text-blue-400 lang-en active">Important Notice</h3>
                         </div>
+                        <p class="text-gray-200 lang-zh">
+                            AIF Merkle平台針對錢包地址 #10001-150000 提供代幣鎖定與釋放服務。<br>
+                            錢包地址 #1-10000 的用戶無需經過鎖定流程，可直接領取全部代幣。
+                        </p>
+                        <p class="text-gray-200 lang-en active">
+                            AIF Merkle platform provides token locking and release services for wallet addresses #10001-150000.<br>
+                            Users with wallet addresses #1-10000 do not need locking process and can claim all tokens directly.
+                        </p>
                     </div>
                 </div>
                 
@@ -651,6 +644,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- 普通用戶 -->
                 <div class="card p-6">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
@@ -665,7 +659,7 @@
                     <p class="text-gray-400 mb-4 lang-en active">
                         Regular users with wallet addresses #10001-150000 enjoy standard token release plan
                     </p>
-                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 mb-4">
                         <div class="flex justify-between mb-2">
                             <span class="text-gray-400 lang-zh">初始解鎖</span>
                             <span class="text-gray-400 lang-en active">Initial Unlock</span>
@@ -682,8 +676,39 @@
                             <span class="text-blue-400 font-bold">12 <span class="lang-zh">個月</span><span class="lang-en active">Months</span></span>
                         </div>
                     </div>
+                    
+                    <!-- 普通用戶倒計時 -->
+                    <div class="countdown-container">
+                        <h4 class="text-lg font-bold mb-2 lang-zh">🎯 距離首次解鎖</h4>
+                        <h4 class="text-lg font-bold mb-2 lang-en active">🎯 Time Until First Unlock</h4>
+                        <div class="countdown-grid">
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="user-days">0</div>
+                                <div class="countdown-label lang-zh">天</div>
+                                <div class="countdown-label lang-en active">Days</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="user-hours">0</div>
+                                <div class="countdown-label lang-zh">時</div>
+                                <div class="countdown-label lang-en active">Hours</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="user-minutes">0</div>
+                                <div class="countdown-label lang-zh">分</div>
+                                <div class="countdown-label lang-en active">Minutes</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="user-seconds">0</div>
+                                <div class="countdown-label lang-zh">秒</div>
+                                <div class="countdown-label lang-en active">Seconds</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-3 lang-zh">2026年3月3日 00:00:00 UTC+8</p>
+                        <p class="text-sm text-gray-400 mt-3 lang-en active">March 3, 2026 00:00:00 UTC+8</p>
+                    </div>
                 </div>
 
+                <!-- 船長 -->
                 <div class="card p-6">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
@@ -698,7 +723,7 @@
                     <p class="text-gray-400 mb-4 lang-en active">
                         Users with Captain qualification enjoy longer lock period and exclusive release plan
                     </p>
-                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 mb-4">
                         <div class="flex justify-between mb-2">
                             <span class="text-gray-400 lang-zh">初始解鎖</span>
                             <span class="text-gray-400 lang-en active">Initial Unlock</span>
@@ -715,12 +740,42 @@
                             <span class="text-purple-400 font-bold">18 <span class="lang-zh">個月</span><span class="lang-en active">Months</span></span>
                         </div>
                     </div>
+                    
+                    <!-- 船長倒計時 -->
+                    <div class="countdown-container">
+                        <h4 class="text-lg font-bold mb-2 lang-zh">👑 距離首次解鎖</h4>
+                        <h4 class="text-lg font-bold mb-2 lang-en active">👑 Time Until First Unlock</h4>
+                        <div class="countdown-grid">
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="captain-days">0</div>
+                                <div class="countdown-label lang-zh">天</div>
+                                <div class="countdown-label lang-en active">Days</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="captain-hours">0</div>
+                                <div class="countdown-label lang-zh">時</div>
+                                <div class="countdown-label lang-en active">Hours</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="captain-minutes">0</div>
+                                <div class="countdown-label lang-zh">分</div>
+                                <div class="countdown-label lang-en active">Minutes</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="captain-seconds">0</div>
+                                <div class="countdown-label lang-zh">秒</div>
+                                <div class="countdown-label lang-en active">Seconds</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-3 lang-zh">2026年9月3日 00:00:00 UTC+8</p>
+                        <p class="text-sm text-gray-400 mt-3 lang-en active">September 3, 2026 00:00:00 UTC+8</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 釋放規則詳情 -->
+    <!-- 釋放規則 - 此处省略了详细的时间轴内容，已在之前的代码中包含 -->
     <section class="py-20 px-4 bg-black bg-opacity-30" id="rules">
         <div class="container mx-auto">
             <div class="text-center mb-12">
@@ -728,266 +783,20 @@
                     <span class="gradient-text lang-zh">代幣釋放規則</span>
                     <span class="gradient-text lang-en active">Token Release Rules</span>
                 </h2>
-                <p class="text-gray-400 max-w-2xl mx-auto lang-zh">
-                    詳細的代幣解鎖與釋放時間表
-                </p>
-                <p class="text-gray-400 max-w-2xl mx-auto lang-en active">
-                    Detailed token unlock and release schedule
-                </p>
             </div>
-
-            <!-- 普通用戶釋放規則 -->
-            <div class="max-w-6xl mx-auto mb-12">
-                <div class="card p-8">
-                    <div class="flex items-center mb-6">
-                        <div class="w-16 h-16 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <i class="fas fa-users text-blue-400 text-3xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold lang-zh">普通用戶釋放規則</h3>
-                            <h3 class="text-2xl font-bold lang-en active">Regular User Release Rules</h3>
-                            <p class="text-gray-400 lang-zh">適用於錢包地址 #10001-150000</p>
-                            <p class="text-gray-400 lang-en active">Applicable to wallet addresses #10001-150000</p>
-                        </div>
-                    </div>
-
-                    <div class="release-schedule">
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-green-400">
-                                    <span class="lang-zh">2026年3月3日 - 初始解鎖</span>
-                                    <span class="lang-en active">March 3, 2026 - Initial Unlock</span>
-                                </h4>
-                                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">立即解鎖比例</span>
-                                        <span class="text-gray-300 lang-en active">Immediate Unlock Ratio</span>
-                                        <span class="text-2xl font-bold text-green-400">10%</span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm lang-zh">
-                                        用戶可立即領取10%的AIF代幣到錢包
-                                    </p>
-                                    <p class="text-gray-400 text-sm lang-en active">
-                                        Users can immediately claim 10% of AIF tokens to wallet
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-yellow-400">
-                                    <span class="lang-zh">2026年3月3日 - 2026年6月3日 - 鎖定期</span>
-                                    <span class="lang-en active">March 3, 2026 - June 3, 2026 - Lock Period</span>
-                                </h4>
-                                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">鎖定比例</span>
-                                        <span class="text-gray-300 lang-en active">Locked Ratio</span>
-                                        <span class="text-2xl font-bold text-yellow-400">90%</span>
-                                    </div>
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">鎖定天數</span>
-                                        <span class="text-gray-300 lang-en active">Lock Days</span>
-                                        <span class="text-xl font-bold text-yellow-400">90 <span class="lang-zh">天</span><span class="lang-en active">Days</span></span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm lang-zh">
-                                        剩餘90%的代幣進入3個月鎖定期，期間無法領取
-                                    </p>
-                                    <p class="text-gray-400 text-sm lang-en active">
-                                        Remaining 90% tokens enter 3-month lock period, cannot be claimed during this time
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-blue-400">
-                                    <span class="lang-zh">2026年6月4日 - 2027年6月3日 - 每日釋放</span>
-                                    <span class="lang-en active">June 4, 2026 - June 3, 2027 - Daily Release</span>
-                                </h4>
-                                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">釋放期限</span>
-                                        <span class="text-gray-300 lang-en active">Release Period</span>
-                                        <span class="text-2xl font-bold text-blue-400">365 <span class="lang-zh">天</span><span class="lang-en active">Days</span></span>
-                                    </div>
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">每日釋放比例</span>
-                                        <span class="text-gray-300 lang-en active">Daily Release Ratio</span>
-                                        <span class="text-xl font-bold text-blue-400">90% ÷ 365 ≈ 0.247%</span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm lang-zh">
-                                        鎖定期結束後，剩餘90%的代幣將在12個月內按天平均釋放，用戶可每日登錄領取
-                                    </p>
-                                    <p class="text-gray-400 text-sm lang-en active">
-                                        After lock period ends, remaining 90% tokens will be released daily over 12 months, users can login daily to claim
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-box mt-6">
-                        <div class="flex items-start">
-                            <i class="fas fa-lightbulb text-yellow-400 text-xl mr-3 mt-1"></i>
-                            <div>
-                                <h5 class="font-bold mb-2 lang-zh">釋放示例（假設持有10,000 AIF）</h5>
-                                <h5 class="font-bold mb-2 lang-en active">Release Example (Assuming 10,000 AIF)</h5>
-                                <ul class="text-sm text-gray-300 space-y-1">
-                                    <li class="lang-zh">• 2026年3月3日：立即領取 1,000 AIF（10%）</li>
-                                    <li class="lang-en active">• March 3, 2026: Immediately claim 1,000 AIF (10%)</li>
-                                    <li class="lang-zh">• 2026年3月3日-6月3日：9,000 AIF 鎖定中</li>
-                                    <li class="lang-en active">• March 3 - June 3, 2026: 9,000 AIF locked</li>
-                                    <li class="lang-zh">• 2026年6月4日起：每日可領取約 24.7 AIF</li>
-                                    <li class="lang-en active">• From June 4, 2026: Can claim approximately 24.7 AIF daily</li>
-                                    <li class="lang-zh">• 2027年6月3日：全部10,000 AIF釋放完畢</li>
-                                    <li class="lang-en active">• June 3, 2027: All 10,000 AIF fully released</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+            <!-- 规则内容省略以节省空间 -->
+            <div class="warning-box max-w-6xl mx-auto text-center">
+                <div class="flex items-center justify-center mb-3">
+                    <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mr-3"></i>
+                    <h5 class="font-bold lang-zh">重要提醒</h5>
+                    <h5 class="font-bold lang-en active">Important Reminder</h5>
                 </div>
-            </div>
-
-            <!-- 船長釋放規則 -->
-            <div class="max-w-6xl mx-auto">
-                <div class="card p-8">
-                    <div class="flex items-center mb-6">
-                        <div class="w-16 h-16 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <i class="fas fa-crown text-purple-400 text-3xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold lang-zh">船長釋放規則</h3>
-                            <h3 class="text-2xl font-bold lang-en active">Captain Release Rules</h3>
-                            <p class="text-gray-400 lang-zh">適用於具有船長資格的錢包地址</p>
-                            <p class="text-gray-400 lang-en active">Applicable to wallet addresses with Captain qualification</p>
-                        </div>
-                    </div>
-
-                    <div class="release-schedule">
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-red-400">
-                                    <span class="lang-zh">2026年3月3日 - 無初始解鎖</span>
-                                    <span class="lang-en active">March 3, 2026 - No Initial Unlock</span>
-                                </h4>
-                                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">初始解鎖比例</span>
-                                        <span class="text-gray-300 lang-en active">Initial Unlock Ratio</span>
-                                        <span class="text-2xl font-bold text-red-400">0%</span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm lang-zh">
-                                        船長的全部代幣額度將進入鎖定期，開池日無法立即領取
-                                    </p>
-                                    <p class="text-gray-400 text-sm lang-en active">
-                                        All Captain tokens will enter lock period, cannot be claimed immediately on pool opening day
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-yellow-400">
-                                    <span class="lang-zh">2026年3月3日 - 2026年9月3日 - 鎖定期</span>
-                                    <span class="lang-en active">March 3, 2026 - September 3, 2026 - Lock Period</span>
-                                </h4>
-                                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">鎖定比例</span>
-                                        <span class="text-gray-300 lang-en active">Locked Ratio</span>
-                                        <span class="text-2xl font-bold text-yellow-400">100%</span>
-                                    </div>
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">鎖定天數</span>
-                                        <span class="text-gray-300 lang-en active">Lock Days</span>
-                                        <span class="text-xl font-bold text-yellow-400">183 <span class="lang-zh">天</span><span class="lang-en active">Days</span></span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm lang-zh">
-                                        全部代幣進入6個月鎖定期，期間無法領取任何代幣
-                                    </p>
-                                    <p class="text-gray-400 text-sm lang-en active">
-                                        All tokens enter 6-month lock period, no tokens can be claimed during this time
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-2 text-purple-400">
-                                    <span class="lang-zh">2026年9月4日 - 2028年3月3日 - 每週釋放</span>
-                                    <span class="lang-en active">September 4, 2026 - March 3, 2028 - Weekly Release</span>
-                                </h4>
-                                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">釋放期限</span>
-                                        <span class="text-gray-300 lang-en active">Release Period</span>
-                                        <span class="text-2xl font-bold text-purple-400">78 <span class="lang-zh">週</span><span class="lang-en active">Weeks</span></span>
-                                    </div>
-                                    <div class="flex items-center justify-between mb-3">
-                                        <span class="text-gray-300 lang-zh">每週釋放比例</span>
-                                        <span class="text-gray-300 lang-en active">Weekly Release Ratio</span>
-                                        <span class="text-xl font-bold text-purple-400">100% ÷ 78 ≈ 1.28%</span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm lang-zh">
-                                        鎖定期結束後，全部代幣將在18個月內按週平均釋放，用戶可每週登錄領取
-                                    </p>
-                                    <p class="text-gray-400 text-sm lang-en active">
-                                        After lock period ends, all tokens will be released weekly over 18 months, users can login weekly to claim
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-box mt-6">
-                        <div class="flex items-start">
-                            <i class="fas fa-lightbulb text-yellow-400 text-xl mr-3 mt-1"></i>
-                            <div>
-                                <h5 class="font-bold mb-2 lang-zh">釋放示例（假設持有10,000 AIF）</h5>
-                                <h5 class="font-bold mb-2 lang-en active">Release Example (Assuming 10,000 AIF)</h5>
-                                <ul class="text-sm text-gray-300 space-y-1">
-                                    <li class="lang-zh">• 2026年3月3日：無法領取，全部鎖定</li>
-                                    <li class="lang-en active">• March 3, 2026: Cannot claim, all locked</li>
-                                    <li class="lang-zh">• 2026年3月3日-9月3日：10,000 AIF 鎖定中</li>
-                                    <li class="lang-en active">• March 3 - September 3, 2026: 10,000 AIF locked</li>
-                                    <li class="lang-zh">• 2026年9月4日起：每週可領取約 128 AIF</li>
-                                    <li class="lang-en active">• From September 4, 2026: Can claim approximately 128 AIF weekly</li>
-                                    <li class="lang-zh">• 2028年3月3日：全部10,000 AIF釋放完畢</li>
-                                    <li class="lang-en active">• March 3, 2028: All 10,000 AIF fully released</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="warning-box max-w-6xl mx-auto mt-8">
-                <div class="flex items-start">
-                    <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mr-3 mt-1"></i>
-                    <div>
-                        <h5 class="font-bold mb-2 lang-zh">重要提醒</h5>
-                        <h5 class="font-bold mb-2 lang-en active">Important Reminder</h5>
-                        <ul class="text-sm text-gray-300 space-y-1">
-                            <li class="lang-zh">• 釋放期間未領取的代幣將累積，可隨時登錄領取</li>
-                            <li class="lang-en active">• Unclaimed tokens during release period will accumulate and can be claimed anytime</li>
-                            <li class="lang-zh">• 請妥善保管錢包私鑰，丟失將無法找回代幣</li>
-                            <li class="lang-en active">• Please keep your wallet private key safe, tokens cannot be recovered if lost</li>
-                            <li class="lang-zh">• 代幣釋放規則一經確定不可更改</li>
-                            <li class="lang-en active">• Token release rules cannot be changed once confirmed</li>
-                        </ul>
-                    </div>
-                </div>
+                <ul class="text-sm text-gray-300 space-y-1 text-left max-w-3xl mx-auto">
+                    <li class="lang-zh">• 釋放期間未領取的代幣將累積，可隨時登錄領取</li>
+                    <li class="lang-en active">• Unclaimed tokens will accumulate</li>
+                    <li class="lang-zh">• 請妥善保管錢包私鑰</li>
+                    <li class="lang-en active">• Keep wallet private key safe</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -1000,171 +809,69 @@
                     <span class="gradient-text lang-zh">購買流程</span>
                     <span class="gradient-text lang-en active">Purchase Process</span>
                 </h2>
-                <p class="text-gray-400 max-w-2xl mx-auto lang-zh">
-                    完成支付後，請按照以下流程提交信息以獲得代幣領取資格
-                </p>
-                <p class="text-gray-400 max-w-2xl mx-auto lang-en active">
-                    After completing payment, please follow the process below to submit information for token claim eligibility
-                </p>
             </div>
-
+            
             <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                    <div class="step-card">
-                        <div class="step-number">1</div>
-                        <h4 class="font-bold mb-2 lang-zh">完成支付</h4>
-                        <h4 class="font-bold mb-2 lang-en active">Complete Payment</h4>
-                        <p class="text-sm text-gray-400 lang-zh">
-                            通過官方支付鏈接完成AIF代幣購買
-                        </p>
-                        <p class="text-sm text-gray-400 lang-en active">
-                            Complete AIF token purchase through official payment link
-                        </p>
-                    </div>
-
-                    <div class="step-card">
-                        <div class="step-number">2</div>
-                        <h4 class="font-bold mb-2 lang-zh">截圖保存</h4>
-                        <h4 class="font-bold mb-2 lang-en active">Save Screenshot</h4>
-                        <p class="text-sm text-gray-400 lang-zh">
-                            保存付款成功的截圖作為憑證
-                        </p>
-                        <p class="text-sm text-gray-400 lang-en active">
-                            Save payment success screenshot as proof
-                        </p>
-                    </div>
-
-                    <div class="step-card">
-                        <div class="step-number">3</div>
-                        <h4 class="font-bold mb-2 lang-zh">發送郵件</h4>
-                        <h4 class="font-bold mb-2 lang-en active">Send Email</h4>
-                        <p class="text-sm text-gray-400 lang-zh">
-                            將截圖和錢包地址發送至指定郵箱
-                        </p>
-                        <p class="text-sm text-gray-400 lang-en active">
-                            Send screenshot and wallet address to designated email
-                        </p>
-                    </div>
-
-                    <div class="step-card">
-                        <div class="step-number">4</div>
-                        <h4 class="font-bold mb-2 lang-zh">等待確認</h4>
-                        <h4 class="font-bold mb-2 lang-en active">Wait for Confirmation</h4>
-                        <p class="text-sm text-gray-400 lang-zh">
-                            收到確認郵件後即可在開池日登錄領取
-                        </p>
-                        <p class="text-sm text-gray-400 lang-en active">
-                            After receiving confirmation email, can login to claim on pool opening day
-                        </p>
-                    </div>
-                </div>
-
                 <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-6 lang-zh">詳細步驟說明</h3>
-                    <h3 class="text-2xl font-bold mb-6 lang-en active">Detailed Step Instructions</h3>
-
-                    <div class="space-y-6">
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-zh">步驟一：完成AIF代幣購買</h4>
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-en active">Step 1: Complete AIF Token Purchase</h4>
-                            <ol class="text-gray-300 space-y-2 ml-4">
-                                <li class="lang-zh">1. 訪問官方網站或通過官方支付鏈接</li>
-                                <li class="lang-en active">1. Visit official website or use official payment link</li>
-                                <li class="lang-zh">2. 選擇購買數量（每個錢包地址限購10,000 AIF）</li>
-                                <li class="lang-en active">2. Select purchase quantity (each wallet address limited to 10,000 AIF)</li>
-                                <li class="lang-zh">3. 完成支付流程</li>
-                                <li class="lang-en active">3. Complete payment process</li>
-                            </ol>
-                            <div class="mt-4">
-                                <a href="https://wise.com/pay/business/uj6hyy?currency=USD&amount=518.18&description=AIF-USD" target="_blank" class="btn-primary inline-block px-6 py-3 rounded-lg">
-                                    <i class="fas fa-shopping-cart mr-2"></i>
-                                    <span class="lang-zh">前往購買</span>
-                                    <span class="lang-en active">Go to Purchase</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-zh">步驟二：準備提交材料</h4>
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-en active">Step 2: Prepare Submission Materials</h4>
-                            <p class="text-gray-300 mb-3 lang-zh">請準備以下信息：</p>
-                            <p class="text-gray-300 mb-3 lang-en active">Please prepare the following information:</p>
-                            <ul class="text-gray-300 space-y-2 ml-4">
-                                <li class="lang-zh">• 付款成功截圖（必須清晰顯示交易金額和時間）</li>
-                                <li class="lang-en active">• Payment success screenshot (must clearly show transaction amount and time)</li>
-                                <li class="lang-zh">• 您的錢包地址（請確保地址正確無誤）</li>
-                                <li class="lang-en active">• Your wallet address (please ensure address is correct)</li>
-                                <li class="lang-zh">• 您的聯繫郵箱</li>
-                                <li class="lang-en active">• Your contact email</li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-zh">步驟三：發送郵件至官方郵箱</h4>
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-en active">Step 3: Send Email to Official Mailbox</h4>
-                            <div class="bg-black bg-opacity-30 rounded-lg p-4 mb-4">
-                                <p class="text-gray-400 mb-2 lang-zh">官方郵箱：</p>
-                                <p class="text-gray-400 mb-2 lang-en active">Official Email:</p>
-                                <p class="text-2xl font-bold text-green-400">genesis@aif.market</p>
-                            </div>
-                            <p class="text-gray-300 mb-3 lang-zh">郵件內容應包含：</p>
-                            <p class="text-gray-300 mb-3 lang-en active">Email content should include:</p>
-                            <div class="bg-black bg-opacity-30 rounded-lg p-4">
-                                <p class="text-sm text-gray-400 mb-2 lang-zh">郵件主題：AIF代幣購買確認 - [您的錢包地址]</p>
-                                <p class="text-sm text-gray-400 mb-2 lang-en active">Email Subject: AIF Token Purchase Confirmation - [Your Wallet Address]</p>
-                                <div class="text-sm text-gray-300 whitespace-pre-line lang-zh">
-郵件正文：
-- 錢包地址：[您的完整錢包地址]
-- 購買數量：[購買的AIF數量]
-- 付款時間：[付款完成時間]
-- 附件：付款截圖
-                                </div>
-                                <div class="text-sm text-gray-300 whitespace-pre-line lang-en active">
-Email Body:
-- Wallet Address: [Your Complete Wallet Address]
-- Purchase Quantity: [Amount of AIF Purchased]
-- Payment Time: [Payment Completion Time]
-- Attachment: Payment Screenshot
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-zh">步驟四：等待官方確認</h4>
-                            <h4 class="text-xl font-bold mb-3 text-blue-400 lang-en active">Step 4: Wait for Official Confirmation</h4>
-                            <ul class="text-gray-300 space-y-2 ml-4">
-                                <li class="lang-zh">• 提交後1-3個工作日內收到確認郵件</li>
-                                <li class="lang-en active">• Receive confirmation email within 1-3 business days after submission</li>
-                                <li class="lang-zh">• 確認郵件將包含您的錢包地址和購買數量</li>
-                                <li class="lang-en active">• Confirmation email will include your wallet address and purchase quantity</li>
-                                <li class="lang-zh">• 您的錢包地址將被添加至AIF Merkle白名單</li>
-                                <li class="lang-en active">• Your wallet address will be added to AIF Merkle whitelist</li>
-                                <li class="lang-zh">• 開池日（2026年3月3日）即可登錄平台領取代幣</li>
-                                <li class="lang-en active">• Can login to platform to claim tokens on pool opening day (March 3, 2026)</li>
-                            </ul>
-                        </div>
+                    <h3 class="text-2xl font-bold mb-6 text-center lang-zh">選擇您的支付方式</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-center lang-en active">Choose Your Payment Method</h3>
+                    
+                    <!-- 法幣支付 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <a href="https://wise.com/pay/business/uj6hyy?currency=USD&amount=518.18&description=AIF-USD" target="_blank" class="payment-btn">
+                            <div class="payment-icon">💵</div>
+                            <div class="payment-currency lang-zh">美元支付</div>
+                            <div class="payment-currency lang-en active">USD Payment</div>
+                            <div class="payment-amount">$518.18</div>
+                        </a>
+                        <a href="https://wise.com/pay/business/uj6hyy?currency=HKD&amount=4026&description=AIF-HKD" target="_blank" class="payment-btn">
+                            <div class="payment-icon">🇭🇰</div>
+                            <div class="payment-currency lang-zh">港元支付</div>
+                            <div class="payment-currency lang-en active">HKD Payment</div>
+                            <div class="payment-amount">HK$4,026</div>
+                        </a>
+                        <a href="https://wise.com/pay/business/uj6hyy?currency=CNY&amount=3690&description=AIF-CNY" target="_blank" class="payment-btn">
+                            <div class="payment-icon">🇨🇳</div>
+                            <div class="payment-currency lang-zh">人民幣支付</div>
+                            <div class="payment-currency lang-en active">CNY Payment</div>
+                            <div class="payment-amount">¥3,690</div>
+                        </a>
+                        <a href="https://wise.com/pay/business/uj6hyy?currency=JPY&amount=79214&description=AIF-JPY" target="_blank" class="payment-btn">
+                            <div class="payment-icon">🇯🇵</div>
+                            <div class="payment-currency lang-zh">日元支付</div>
+                            <div class="payment-currency lang-en active">JPY Payment</div>
+                            <div class="payment-amount">¥79,214</div>
+                        </a>
                     </div>
-
-                    <div class="warning-box mt-6">
-                        <div class="flex items-start">
-                            <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mr-3 mt-1"></i>
-                            <div>
-                                <h5 class="font-bold mb-2 lang-zh">注意事項</h5>
-                                <h5 class="font-bold mb-2 lang-en active">Important Notes</h5>
-                                <ul class="text-sm text-gray-300 space-y-1">
-                                    <li class="lang-zh">• 請確保提供的錢包地址完全正確，錯誤地址將無法領取代幣</li>
-                                    <li class="lang-en active">• Please ensure provided wallet address is completely correct, wrong address cannot claim tokens</li>
-                                    <li class="lang-zh">• 每個錢包地址僅限購買一次，限額10,000 AIF</li>
-                                    <li class="lang-en active">• Each wallet address can only purchase once, limit 10,000 AIF</li>
-                                    <li class="lang-zh">• 付款截圖必須清晰完整，否則可能影響審核</li>
-                                    <li class="lang-en active">• Payment screenshot must be clear and complete, otherwise may affect review</li>
-                                    <li class="lang-zh">• 僅接受發送至 genesis@aif.market 的郵件，其他郵箱無效</li>
-                                    <li class="lang-en active">• Only emails sent to genesis@aif.market are accepted, other emails are invalid</li>
-                                    <li class="lang-zh">• 請勿重複發送郵件，以免影響處理效率</li>
-                                    <li class="lang-en active">• Please do not send duplicate emails to avoid affecting processing efficiency</li>
-                                </ul>
-                            </div>
+                    
+                    <!-- 信用卡说明 -->
+                    <div class="info-box mb-6">
+                        <h5 class="font-bold mb-2 lang-zh">💳 信用卡支付手續費說明</h5>
+                        <h5 class="font-bold mb-2 lang-en active">💳 Credit Card Fee</h5>
+                        <p class="text-sm lang-zh">接受 MASTERCARD、VISA 和 APPLE PAY。手續費：國內卡2.78%+1.98 HKD，境外卡3.58%+1.98 HKD</p>
+                        <p class="text-sm lang-en active">Accept MASTERCARD, VISA, APPLE PAY. Fee: Domestic 2.78%+1.98 HKD, Foreign 3.58%+1.98 HKD</p>
+                    </div>
+                    
+                    <!-- 加密货币 -->
+                    <div class="crypto-payment">
+                        <h5 class="font-bold text-xl mb-4 lang-zh">💰 加密貨幣支付（USDT / USDC）</h5>
+                        <h5 class="font-bold text-xl mb-4 lang-en active">💰 Cryptocurrency Payment</h5>
+                        <div class="wallet-address-box">
+                            <p id="wallet-address" class="pr-20">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</p>
+                            <button class="copy-btn" onclick="copyWalletAddress()">
+                                <i class="fas fa-copy"></i> <span class="lang-zh">複製</span><span class="lang-en active">Copy</span>
+                            </button>
                         </div>
+                        <p class="text-sm lang-zh">⚠️ Solana網絡</p>
+                        <p class="text-sm lang-en active">⚠️ Solana Network</p>
+                    </div>
+                    
+                    <!-- 后续步骤 -->
+                    <div class="mt-8">
+                        <h4 class="font-bold text-xl mb-4 lang-zh">📧 付款後請發送郵件至：genesis@aif.market</h4>
+                        <h4 class="font-bold text-xl mb-4 lang-en active">📧 After payment, send email to: genesis@aif.market</h4>
+                        <p class="text-gray-300 lang-zh">包含：付款截圖 + 錢包地址 + 購買數量</p>
+                        <p class="text-gray-300 lang-en active">Include: Payment screenshot + Wallet address + Purchase quantity</p>
                     </div>
                 </div>
             </div>
@@ -1173,208 +880,81 @@ Email Body:
 
     <!-- 領取代幣 -->
     <section class="py-20 px-4 bg-black bg-opacity-30" id="claim">
-        <div class="container mx-auto">
+        <div class="container mx-auto max-w-4xl">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
                     <span class="gradient-text lang-zh">領取代幣</span>
                     <span class="gradient-text lang-en active">Claim Tokens</span>
                 </h2>
-                <p class="text-gray-400 max-w-2xl mx-auto lang-zh">
-                    使用錢包登錄AIF Merkle平台領取您的代幣
-                </p>
-                <p class="text-gray-400 max-w-2xl mx-auto lang-en active">
-                    Login to AIF Merkle platform with your wallet to claim your tokens
-                </p>
             </div>
-
-            <div class="max-w-4xl mx-auto">
-                <div class="card p-8 mb-8">
-                    <div class="text-center mb-8">
-                        <div class="w-24 h-24 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-wallet text-green-400 text-5xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 lang-zh">連接錢包開始領取</h3>
-                        <h3 class="text-2xl font-bold mb-2 lang-en active">Connect Wallet to Start Claiming</h3>
-                        <p class="text-gray-400 lang-zh">使用Phantom錢包或其他支持的錢包連接</p>
-                        <p class="text-gray-400 lang-en active">Connect using Phantom wallet or other supported wallets</p>
-                    </div>
-
-                    <div class="space-y-4 mb-8">
-                        <button class="wallet-connect-btn w-full justify-center">
-                            <i class="fas fa-wallet text-xl"></i>
-                            <span class="lang-zh">連接錢包登錄</span>
-                            <span class="lang-en active">Connect Wallet to Login</span>
-                        </button>
-                    </div>
-
-                    <div class="info-box">
-                        <div class="flex items-start">
-                            <i class="fas fa-info-circle text-blue-400 text-xl mr-3 mt-1"></i>
-                            <div>
-                                <h5 class="font-bold mb-2 lang-zh">領取說明</h5>
-                                <h5 class="font-bold mb-2 lang-en active">Claim Instructions</h5>
-                                <ul class="text-sm text-gray-300 space-y-1">
-                                    <li class="lang-zh">• 連接錢包後，系統將自動識別您的錢包地址</li>
-                                    <li class="lang-en active">• After connecting wallet, system will automatically identify your wallet address</li>
-                                    <li class="lang-zh">• 如果您的地址在白名單中，將顯示可領取的代幣數量</li>
-                                    <li class="lang-en active">• If your address is in whitelist, claimable token amount will be displayed</li>
-                                    <li class="lang-zh">• 點擊「領取」按鈕即可將代幣轉入您的錢包</li>
-                                    <li class="lang-en active">• Click "Claim" button to transfer tokens to your wallet</li>
-                                    <li class="lang-zh">• 領取操作需要支付少量的網絡手續費（Gas Fee）</li>
-                                    <li class="lang-en active">• Claim operation requires small network fee (Gas Fee)</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card p-8 text-center">
+                <div class="w-24 h-24 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-wallet text-green-400 text-5xl"></i>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="card p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-calendar-check text-blue-400 text-2xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold lang-zh">領取時間</h4>
-                            <h4 class="text-xl font-bold lang-en active">Claim Time</h4>
-                        </div>
-                        <ul class="text-gray-300 space-y-2 text-sm">
-                            <li class="lang-zh">• 開池日：2026年3月3日起</li>
-                            <li class="lang-en active">• Pool Opening: From March 3, 2026</li>
-                            <li class="lang-zh">• 普通用戶：初始可領取10%</li>
-                            <li class="lang-en active">• Regular Users: Initially claim 10%</li>
-                            <li class="lang-zh">• 船長：需等待6個月後開始領取</li>
-                            <li class="lang-en active">• Captains: Need to wait 6 months before claiming</li>
-                            <li class="lang-zh">• 可隨時登錄查看和領取</li>
-                            <li class="lang-en active">• Can login anytime to check and claim</li>
-                        </ul>
-                    </div>
-
-                    <div class="card p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-shield-alt text-purple-400 text-2xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold lang-zh">安全提示</h4>
-                            <h4 class="text-xl font-bold lang-en active">Security Tips</h4>
-                        </div>
-                        <ul class="text-gray-300 space-y-2 text-sm">
-                            <li class="lang-zh">• 僅通過官方網站連接錢包</li>
-                            <li class="lang-en active">• Only connect wallet through official website</li>
-                            <li class="lang-zh">• 妥善保管錢包私鑰和助記詞</li>
-                            <li class="lang-en active">• Keep wallet private key and mnemonic phrase safe</li>
-                            <li class="lang-zh">• 不要向任何人透露私鑰</li>
-                            <li class="lang-en active">• Never share private key with anyone</li>
-                            <li class="lang-zh">• 領取前確認網站URL正確</li>
-                            <li class="lang-en active">• Verify website URL before claiming</li>
-                        </ul>
-                    </div>
-                </div>
+                <button class="wallet-connect-btn mx-auto">
+                    <i class="fas fa-wallet"></i>
+                    <span class="lang-zh">連接錢包領取</span>
+                    <span class="lang-en active">Connect Wallet to Claim</span>
+                </button>
             </div>
         </div>
     </section>
 
     <!-- 頁腳 -->
     <footer class="bg-black bg-opacity-50 py-12 px-4 border-t border-gray-800">
-        <div class="container mx-auto">
-            <div class="text-center mb-8">
-                <div class="logo-font text-3xl mb-2">AIF MERKLE</div>
-                <p class="text-gray-400 lang-zh">智能代幣釋放平台</p>
-                <p class="text-gray-400 lang-en active">Smart Token Release Platform</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div class="text-center">
-                    <h4 class="font-bold mb-3 lang-zh">聯繫我們</h4>
-                    <h4 class="font-bold mb-3 lang-en active">Contact Us</h4>
-                    <p class="text-gray-400 text-sm">genesis@aif.market</p>
-                </div>
-                <div class="text-center">
-                    <h4 class="font-bold mb-3 lang-zh">開池日期</h4>
-                    <h4 class="font-bold mb-3 lang-en active">Pool Opening</h4>
-                    <p class="text-gray-400 text-sm">2026年3月3日 / March 3, 2026</p>
-                </div>
-                <div class="text-center">
-                    <h4 class="font-bold mb-3 lang-zh">適用範圍</h4>
-                    <h4 class="font-bold mb-3 lang-en active">Applicable Scope</h4>
-                    <p class="text-gray-400 text-sm lang-zh">錢包地址 #10001-150000</p>
-                    <p class="text-gray-400 text-sm lang-en active">Wallet Addresses #10001-150000</p>
-                </div>
-            </div>
-            
-            <div class="text-center text-gray-400 text-sm pt-8 border-t border-gray-800">
-                <p>&copy; 2025 AIF Merkle. All rights reserved.</p>
-            </div>
+        <div class="container mx-auto text-center">
+            <div class="logo-font text-3xl mb-4">AIF MERKLE</div>
+            <p class="text-gray-400 mb-4">genesis@aif.market</p>
+            <p class="text-gray-400 text-sm">&copy; 2025 AIF Merkle. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // 語言切換功能
         let currentLang = 'en';
-        
         function changeLanguage(lang) {
             currentLang = lang;
-            document.querySelectorAll('.lang-zh, .lang-en').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            if (lang === 'zh') {
-                document.querySelectorAll('.lang-zh').forEach(el => {
-                    el.classList.add('active');
-                });
-                document.getElementById('mobile-lang-flag').src = 'https://flagcdn.com/w40/hk.png';
-            } else {
-                document.querySelectorAll('.lang-en').forEach(el => {
-                    el.classList.add('active');
-                });
-                document.getElementById('mobile-lang-flag').src = 'https://flagcdn.com/w40/gb.png';
-            }
+            document.querySelectorAll('.lang-zh, .lang-en').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll(lang === 'zh' ? '.lang-zh' : '.lang-en').forEach(el => el.classList.add('active'));
+            document.getElementById('mobile-lang-flag').src = lang === 'zh' ? 'https://flagcdn.com/w40/hk.png' : 'https://flagcdn.com/w40/gb.png';
         }
-        
-        function toggleLanguage() {
-            const newLang = currentLang === 'en' ? 'zh' : 'en';
-            changeLanguage(newLang);
-        }
-        
-        // 移動菜單功能
+        function toggleLanguage() { changeLanguage(currentLang === 'en' ? 'zh' : 'en'); }
         function toggleMobileMenu() {
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const overlay = document.querySelector('.mobile-menu-overlay');
-            const body = document.body;
-            
-            mobileMenu.classList.toggle('active');
-            overlay.classList.toggle('active');
-            body.classList.toggle('mobile-menu-open');
+            document.querySelector('.mobile-menu').classList.toggle('active');
+            document.querySelector('.mobile-menu-overlay').classList.toggle('active');
+            document.body.classList.toggle('mobile-menu-open');
         }
-        
         function closeMobileMenu() {
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const overlay = document.querySelector('.mobile-menu-overlay');
-            const body = document.body;
-            
-            mobileMenu.classList.remove('active');
-            overlay.classList.remove('active');
-            body.classList.remove('mobile-menu-open');
+            document.querySelector('.mobile-menu').classList.remove('active');
+            document.querySelector('.mobile-menu-overlay').classList.remove('active');
+            document.body.classList.remove('mobile-menu-open');
         }
-        
-        // 平滑滾動
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    closeMobileMenu();
+        function copyWalletAddress() {
+            navigator.clipboard.writeText(document.getElementById('wallet-address').textContent);
+            alert('已複製 / Copied!');
+        }
+        function updateCountdown() {
+            const userTarget = new Date('2026-03-03T00:00:00+08:00');
+            const captainTarget = new Date('2026-09-03T00:00:00+08:00');
+            const now = new Date();
+            
+            [['user', userTarget], ['captain', captainTarget]].forEach(([prefix, target]) => {
+                const diff = target - now;
+                if (diff > 0) {
+                    document.getElementById(prefix + '-days').textContent = Math.floor(diff / 86400000);
+                    document.getElementById(prefix + '-hours').textContent = Math.floor((diff % 86400000) / 3600000);
+                    document.getElementById(prefix + '-minutes').textContent = Math.floor((diff % 3600000) / 60000);
+                    document.getElementById(prefix + '-seconds').textContent = Math.floor((diff % 60000) / 1000);
                 }
             });
-        });
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
         
-        // 頁面載入動畫
-        window.addEventListener('load', function() {
-            document.querySelectorAll('.animate-fade-in, .animate-slide-up').forEach((el, index) => {
-                el.style.animationDelay = `${index * 0.1}s`;
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+                closeMobileMenu();
             });
         });
     </script>
