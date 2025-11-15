@@ -644,7 +644,7 @@
                 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-value">$0.25895</div>
+                        <div class="stat-value">$0.25</div>
                         <div class="stat-label lang-en active">Current Price</div>
                         <div class="stat-label lang-zh">當前價格</div>
                     </div>
@@ -667,13 +667,23 @@
                 
                 <div class="info-box mt-6">
                     <p class="text-center text-lg font-bold lang-en active">
-                        <i class="fas fa-wallet"></i> Official Wallet Address: 
-                        <span style="color: var(--accent); font-family: monospace; word-break: break-all;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</span>
+                        <i class="fas fa-wallet"></i> Official Wallet Address:
                     </p>
                     <p class="text-center text-lg font-bold lang-zh">
-                        <i class="fas fa-wallet"></i> 官方錢包地址: 
-                        <span style="color: var(--accent); font-family: monospace; word-break: break-all;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</span>
+                        <i class="fas fa-wallet"></i> 官方錢包地址:
                     </p>
+                    <div class="mt-4 space-y-4">
+                        <div>
+                            <p class="font-bold mb-2 lang-en active" style="color: var(--accent);">Solana Network (SPL Tokens)</p>
+                            <p class="font-bold mb-2 lang-zh" style="color: var(--accent);">Solana 網絡 (SPL 代幣)</p>
+                            <p style="color: var(--accent); font-family: monospace; word-break: break-all;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</p>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2 lang-en active" style="color: var(--accent);">BNB Smart Chain (BEP20)</p>
+                            <p class="font-bold mb-2 lang-zh" style="color: var(--accent);">BNB 智能鏈 (BEP20)</p>
+                            <p style="color: var(--accent); font-family: monospace; word-break: break-all;">0xc059dc798ec9f31e765d9cccffd2c62b993857c9</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -773,25 +783,25 @@
                                     <div class="payment-icon">💵</div>
                                     <div class="text-xl font-bold lang-en active">USD Payment</div>
                                     <div class="text-xl font-bold lang-zh">美元支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">$2,589.5</div>
+                                    <div class="text-2xl font-black" style="color: var(--accent);">$2,500</div>
                                 </a>
                                 <a href="https://wise.com/pay/r/Ax8qZLwr6gZcVlE" target="_blank" class="payment-btn">
                                     <div class="payment-icon">🇭🇰</div>
                                     <div class="text-xl font-bold lang-en active">HKD Payment</div>
                                     <div class="text-xl font-bold lang-zh">港元支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">HK$20,125</div>
+                                    <div class="text-2xl font-black" style="color: var(--accent);">HK$19,500</div>
                                 </a>
                                 <a href="https://wise.com/pay/r/s2pKKoaeqQ6Scsk" target="_blank" class="payment-btn">
                                     <div class="payment-icon">🇨🇳</div>
                                     <div class="text-xl font-bold lang-en active">CNY Payment</div>
                                     <div class="text-xl font-bold lang-zh">人民幣支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">¥18,419</div>
+                                    <div class="text-2xl font-black" style="color: var(--accent);">¥17,800</div>
                                 </a>
                                 <a href="https://wise.com/pay/r/0id4ad2UT0bkljM" target="_blank" class="payment-btn">
                                     <div class="payment-icon">🇯🇵</div>
                                     <div class="text-xl font-bold lang-en active">JPY Payment</div>
                                     <div class="text-xl font-bold lang-zh">日元支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">¥401,000</div>
+                                    <div class="text-2xl font-black" style="color: var(--accent);">¥387,000</div>
                                 </a>
                             </div>
                             <p class="text-sm text-gray-400 lang-en active">
@@ -807,16 +817,52 @@
                         <div class="info-box mt-4">
                             <h4 class="font-bold text-xl mb-3 lang-en active">💰 Cryptocurrency Payment (USDT / USDC)</h4>
                             <h4 class="font-bold text-xl mb-3 lang-zh">💰 加密貨幣支付 (USDT / USDC)</h4>
-                            <div class="wallet-address-box">
-                                <p id="wallet-address" style="flex: 1; font-family: monospace;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</p>
-                                <button class="copy-btn" onclick="copyWalletAddress()">
-                                    <i class="fas fa-copy"></i> <span class="lang-en active">Copy</span><span class="lang-zh">複製</span>
-                                </button>
+                            
+                            <div class="info-box">
+                                <h5 class="font-bold text-lg mb-2 lang-en active" style="color: var(--accent);">Solana Network (SPL Tokens)</h5>
+                                <h5 class="font-bold text-lg mb-2 lang-zh" style="color: var(--accent);">Solana 網絡 (SPL 代幣)</h5>
+                                <div class="wallet-address-box">
+                                    <p id="solana-wallet-address" style="flex: 1; font-family: monospace;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</p>
+                                    <button class="copy-btn" onclick="copySolanaWalletAddress()">
+                                        <i class="fas fa-copy"></i> <span class="lang-en active">Copy</span><span class="lang-zh">複製</span>
+                                    </button>
+                                </div>
+                                <p class="font-bold lang-en active" style="color: var(--warning);">⚠️ Solana Network Only! Do not use other networks</p>
+                                <p class="font-bold lang-zh" style="color: var(--warning);">⚠️ 僅支持 Solana 網絡！請勿使用其他網絡轉賬</p>
                             </div>
-                            <p class="font-bold lang-en active" style="color: var(--warning);">⚠️ Solana Network Only! Do not use other networks</p>
-                            <p class="font-bold lang-zh" style="color: var(--warning);">⚠️ 僅支持 Solana 網絡！請勿使用其他網絡轉賬</p>
-                            <p class="text-sm text-gray-400 mt-2 lang-en active">Amount: 2,589.5 USDT or USDC</p>
-                            <p class="text-sm text-gray-400 mt-2 lang-zh">金額: 2,589.5 USDT 或 USDC</p>
+                            
+                            <div class="info-box mt-4">
+                                <h5 class="font-bold text-lg mb-2 lang-en active" style="color: var(--accent);">BNB Smart Chain (BEP20)</h5>
+                                <h5 class="font-bold text-lg mb-2 lang-zh" style="color: var(--accent);">BNB 智能鏈 (BEP20)</h5>
+                                <div class="wallet-address-box">
+                                    <p id="bsc-wallet-address" style="flex: 1; font-family: monospace;">0xc059dc798ec9f31e765d9cccffd2c62b993857c9</p>
+                                    <button class="copy-btn" onclick="copyBSCWalletAddress()">
+                                        <i class="fas fa-copy"></i> <span class="lang-en active">Copy</span><span class="lang-zh">複製</span>
+                                    </button>
+                                </div>
+                                <p class="font-bold lang-en active" style="color: var(--warning);">⚠️ BSC (BEP20) Network Only! Do not use other networks</p>
+                                <p class="font-bold lang-zh" style="color: var(--warning);">⚠️ 僅支持 BSC (BEP20) 網絡！請勿使用其他網絡轉賬</p>
+                            </div>
+                            
+                            <div class="warning-box mt-4">
+                                <p class="font-bold text-lg lang-en active">
+                                    <i class="fas fa-exclamation-triangle"></i> 
+                                    Please check network selection: BSC BNB Smart Chain (BEP20)
+                                </p>
+                                <p class="font-bold text-lg lang-zh">
+                                    <i class="fas fa-exclamation-triangle"></i> 
+                                    請注意核對網絡選擇: BSC BNB 智能鏈 (BEP20)
+                                </p>
+                                <p class="text-sm mt-2 lang-en active">
+                                    (Please note, only the deposit networks supported by Binance are shown here. If you use networks not supported by Binance for deposit, it may lead to asset loss.)
+                                </p>
+                                <p class="text-sm mt-2 lang-zh">
+                                    (請注意，這裡僅展示了幣安平台所支持的充幣網絡，如果您使用幣安不支持的其他網絡充幣，將可能導致資產損失。)
+                                </p>
+                            </div>
+                            
+                            <p class="text-sm text-gray-400 mt-2 lang-en active">Amount: 2,500 USDT or USDC</p>
+                            <p class="text-sm text-gray-400 mt-2 lang-zh">金額: 2,500 USDT 或 USDC</p>
                         </div>
 
                         <div class="warning-box mt-4">
@@ -933,13 +979,13 @@
                             <div class="receipt-row">
                                 <span class="receipt-label lang-en active">Unit Price</span>
                                 <span class="receipt-label lang-zh">單價</span>
-                                <span class="receipt-value">$0.25895</span>
+                                <span class="receipt-value">$0.25</span>
                             </div>
                             
                             <div class="receipt-row">
                                 <span class="receipt-label lang-en active">Payment Amount</span>
                                 <span class="receipt-label lang-zh">支付金額</span>
-                                <span class="receipt-value">$2,589.50</span>
+                                <span class="receipt-value">$2,500.00</span>
                             </div>
                             
                             <div class="receipt-row">
@@ -1363,11 +1409,19 @@
             document.getElementById('lang-display').textContent = currentLang === 'zh' ? 'EN' : '中文';
         }
 
-        // 复制钱包地址
-        function copyWalletAddress() {
-            const address = document.getElementById('wallet-address').textContent;
+        // 复制Solana钱包地址
+        function copySolanaWalletAddress() {
+            const address = document.getElementById('solana-wallet-address').textContent;
             navigator.clipboard.writeText(address).then(() => {
-                alert(currentLang === 'zh' ? '錢包地址已複製！' : 'Wallet address copied!');
+                alert(currentLang === 'zh' ? 'Solana錢包地址已複製！' : 'Solana wallet address copied!');
+            });
+        }
+
+        // 复制BSC钱包地址
+        function copyBSCWalletAddress() {
+            const address = document.getElementById('bsc-wallet-address').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                alert(currentLang === 'zh' ? 'BSC錢包地址已複製！' : 'BSC wallet address copied!');
             });
         }
 
