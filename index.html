@@ -1,1453 +1,922 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIF Merkle Token Release Platform</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Fonts: Inter (UI) & Space Mono (Code/Numbers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons: FontAwesome (Kept for compatibility with original content icons) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', '"Noto Sans TC"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    colors: {
+                        black: '#1a1a1a', 
+                        offblack: '#222222',
+                        white: '#ffffff',
+                        offwhite: '#f9f9f9',
+                        gray: {
+                            50: '#fafafa',
+                            100: '#f3f3f3',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            800: '#262626',
+                            900: '#111111'
+                        },
+                        // Accent colors from original index.html adapted to new style
+                        accent: {
+                            DEFAULT: '#000000', // Primary actions are black
+                            highlight: '#00ff9d', // Keep the crypto green for accents
+                            warning: '#f59e0b',
+                            danger: '#ef4444',
+                        }
+                    },
+                    animation: {
+                        'marquee': 'marquee 40s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #8e44ad;
-            --accent: #00ff9d;
-            --trust-green: #27ae60;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --gold: #FFD700;
-            --dark-bg: #0a0a0a;
-            --card-bg: rgba(26, 32, 44, 0.8);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Base & Reset */
         body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background-color: #0a0a0a;
-            color: #ffffff;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(142, 68, 173, 0.1) 0%, transparent 20%);
-            line-height: 1.7;
-            padding-top: 80px;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            -webkit-font-smoothing: antialiased;
         }
         
-        .logo-font {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            letter-spacing: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
-            animation: logoGlow 3s ease-in-out infinite alternate;
-        }
+        /* Language Toggle System - HKAIIFF Style */
+        body[data-lang="en"] .lang-zh { display: none !important; }
+        body[data-lang="zh"] .lang-en { display: none !important; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fff; }
+        ::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ccc; }
+
+        /* Reveal Animation */
+        .reveal-text { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal-text.active { opacity: 1; transform: translateY(0); }
         
-        @keyframes logoGlow {
-            0% { text-shadow: 0 0 10px rgba(0, 255, 157, 0.3); }
-            100% { text-shadow: 0 0 25px rgba(0, 255, 157, 0.6), 0 0 35px rgba(52, 152, 219, 0.4); }
-        }
-        
-        .gradient-text {
-            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .card {
-            background-color: rgba(26, 32, 44, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Custom Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border-radius: 16px;
-            transition: all 0.3s ease;
+            border: 1px solid #e5e5e5;
+        }
+
+        .mono-number {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Receipt Stamp Animation */
+        .stamp-spin {
+            animation: stampRotate 10s linear infinite;
+        }
+        @keyframes stampRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.2);
-            border-color: rgba(0, 255, 157, 0.3);
+        /* Receipt Pattern Background */
+        .receipt-bg {
+            background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-        
-        .navbar {
-            background-color: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
-            padding: 0.75rem 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
+
+        /* Merkle Tree Lines */
+        .tree-line-vertical {
+            width: 1px;
+            background-color: #374151; /* gray-700 */
         }
-        
-        .lang-switch {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(0, 255, 157, 0.3);
-            border-radius: 50px;
-            padding: 0.5rem 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .lang-switch:hover {
-            background: rgba(0, 255, 157, 0.2);
-            border-color: var(--accent);
-        }
-        
-        .hero {
-            min-height: 85vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            background-image: url('merkle.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.85) 100%);
-            z-index: 1;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .trust-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(39, 174, 96, 0.15);
-            border: 2px solid var(--trust-green);
-            border-radius: 30px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 600;
-            color: var(--trust-green);
-            margin: 0.5rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(39, 174, 96, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(39, 174, 96, 0.6); }
-        }
-        
-        .warning-box {
-            background: linear-gradient(135deg, rgba(243, 156, 18, 0.2), rgba(230, 126, 34, 0.2));
-            border: 2px solid var(--warning);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .warning-box::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .info-box {
-            background: rgba(52, 152, 219, 0.1);
-            border: 2px solid rgba(52, 152, 219, 0.4);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .success-box {
-            background: rgba(39, 174, 96, 0.1);
-            border: 2px solid rgba(39, 174, 96, 0.4);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .progress-section {
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(142, 68, 173, 0.15));
-            border: 3px solid var(--primary);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-        }
-        
-        .progress-bar-container {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 50px;
-            height: 40px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(0, 255, 157, 0.3);
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 50px;
-            transition: width 1s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 1rem;
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .stat-card {
-            background: rgba(26, 32, 44, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-        
-        .process-step {
-            background: rgba(26, 32, 44, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 1.5rem 0;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .process-step:hover {
-            border-color: var(--accent);
-            transform: translateX(10px);
-            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
-        }
-        
-        .process-step::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, var(--primary), var(--accent), var(--secondary));
-            border-radius: 4px 0 0 4px;
-        }
-        
-        .receipt-template {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-            border: 3px solid rgba(0, 255, 157, 0.4);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 2rem 0;
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0, 255, 157, 0.2);
-        }
-        
-        .receipt-header {
-            text-align: center;
-            border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
-            padding-bottom: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .receipt-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .receipt-label {
-            color: #aaa;
-            font-weight: 500;
-        }
-        
-        .receipt-value {
-            color: #fff;
-            font-weight: 700;
-        }
-        
-        .official-stamp {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 120px;
-            height: 120px;
-            border: 4px solid var(--danger);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: rotate(-15deg);
-            font-weight: 900;
-            color: var(--danger);
-            text-align: center;
-            line-height: 1.2;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .merkle-explain {
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.15), rgba(142, 68, 173, 0.15));
-            border: 3px solid var(--primary);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-            position: relative;
-        }
-        
-        .merkle-icon {
-            font-size: 4rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .timeline {
-            position: relative;
-            padding: 2rem 0;
-        }
-        
-        .timeline::before {
-            content: "";
-            position: absolute;
-            left: 30px;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--primary), var(--accent), var(--secondary));
-        }
-        
-        .timeline-item {
-            position: relative;
-            padding-left: 80px;
-            margin-bottom: 3rem;
-        }
-        
-        .timeline-marker {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-            z-index: 1;
-        }
-        
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
-            border: 3px solid var(--gold);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-            animation: highlight-glow 2s ease-in-out infinite;
-        }
-        
-        @keyframes highlight-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            border: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
-        }
-        
-        .payment-btn {
-            background: rgba(26, 32, 44, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            display: block;
-            text-decoration: none;
-            color: white;
-        }
-        
-        .payment-btn:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.3);
-        }
-        
-        .payment-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .wallet-address-box {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 1rem 0;
-            word-break: break-all;
-        }
-        
-        .copy-btn {
-            background: var(--accent);
-            color: #000;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            margin-left: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.4);
-        }
-        
-        .rule-item {
-            background: rgba(231, 76, 60, 0.1);
-            border-left: 4px solid var(--danger);
-            padding: 1rem 1.5rem;
-            margin: 1rem 0;
-            border-radius: 8px;
-        }
-        
-        .rule-item strong {
-            color: var(--danger);
-            font-size: 1.1rem;
-        }
-        
-        .footer-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .footer-link-card {
-            background: rgba(26, 32, 44, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-link-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.2);
-        }
-        
-        .footer-link-card a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .footer-link-card a:hover {
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            
-            .process-step {
-                padding: 1.5rem;
-            }
-            
-            .receipt-template {
-                padding: 1.5rem;
-            }
-            
-            .official-stamp {
-                width: 80px;
-                height: 80px;
-                font-size: 0.7rem;
-            }
-            
-            .timeline::before {
-                left: 20px;
-            }
-            
-            .timeline-item {
-                padding-left: 60px;
-            }
-            
-            .timeline-marker {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-            
-            .wallet-address-box {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .copy-btn {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-        
-        /* 语言切换 */
-        .lang-zh, .lang-en {
-            display: none;
-        }
-        
-        .lang-zh.active, .lang-en.active {
-            display: inline;
-        }
-        
-        div.lang-zh.active, div.lang-en.active,
-        section.lang-zh.active, section.lang-en.active,
-        p.lang-zh.active, p.lang-en.active,
-        h1.lang-zh.active, h1.lang-en.active,
-        h2.lang-zh.active, h2.lang-en.active,
-        h3.lang-zh.active, h3.lang-en.active,
-        h4.lang-zh.active, h4.lang-en.active,
-        h5.lang-zh.active, h5.lang-en.active,
-        ul.lang-zh.active, ul.lang-en.active,
-        li.lang-zh.active, li.lang-en.active {
-            display: block;
+        .tree-line-horizontal {
+            height: 1px;
+            background-color: #374151; /* gray-700 */
         }
     </style>
 </head>
-<body>
 
-    <!-- 导航栏 -->
-    <nav class="navbar">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="logo-font text-2xl">AIF MERKLE</div>
-            <button onclick="toggleLanguage()" class="lang-switch">
-                <i class="fas fa-language"></i>
-                <span id="lang-display">中文</span>
-            </button>
+<body data-lang="en" class="bg-white text-black selection:bg-black selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300">
+        <div class="px-6 md:px-8 py-4 flex justify-between items-center max-w-[1920px] mx-auto">
+            <a href="#" class="flex items-center gap-4 group">
+                <!-- Logo mark -->
+                <div class="w-10 h-10 bg-black text-white flex items-center justify-center font-mono font-bold text-lg rounded-lg group-hover:scale-105 transition-transform">
+                    M
+                </div>
+                
+                <div class="flex flex-col leading-tight">
+                    <span class="text-lg font-bold tracking-tight font-mono">AIF MERKLE</span>
+                    <span class="text-[0.6rem] font-mono uppercase tracking-wider text-gray-500 group-hover:text-black transition-colors">
+                        <span class="lang-en">Token Release Platform</span>
+                        <span class="lang-zh">代幣釋放平台</span>
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-center gap-1 text-[13px] font-medium tracking-wide">
+                <a href="#progress" class="px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"><span class="lang-en">Progress</span><span class="lang-zh">進度</span></a>
+                <a href="#rules" class="px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"><span class="lang-en">Rules</span><span class="lang-zh">規則</span></a>
+                <a href="#process" class="px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"><span class="lang-en">Process</span><span class="lang-zh">流程</span></a>
+                <a href="#verify" class="px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"><span class="lang-en">Verify</span><span class="lang-zh">驗證</span></a>
+                <a href="#faq" class="px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"><span class="lang-en">FAQ</span><span class="lang-zh">問答</span></a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleLanguage()" class="text-xs font-mono border border-gray-200 px-3 py-1.5 rounded-full hover:bg-black hover:text-white transition-all uppercase flex items-center gap-2">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-en">ZH / <strong>EN</strong></span>
+                    <span class="lang-zh"><strong>中文</strong> / EN</span>
+                </button>
+                
+                <a href="#process" class="hidden md:flex bg-black text-white text-[13px] font-medium px-6 py-3 rounded-full hover:scale-105 transition-transform items-center gap-2 shadow-lg">
+                    <span class="lang-en">Connect Wallet</span><span class="lang-zh">連接錢包</span>
+                </a>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero px-4">
-        <div class="container mx-auto text-center hero-content">
-            <div class="trust-badge text-lg mb-6">
-                <i class="fas fa-shield-alt"></i>
-                <span class="lang-en active">Protected by Solana Smart Contract | Secure & Trusted</span>
-                <span class="lang-zh">Solana智能合約保護 | 安全可信</span>
-            </div>
-            <h1 class="text-5xl md:text-7xl font-black mb-6">
-                <span class="gradient-text lang-en active">AIF Merkle Token Release Platform</span>
-                <span class="gradient-text lang-zh">AIF Merkle 代幣釋放平台</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto lang-en active">
-                Merkle Smart Contract System on Solana Blockchain provides immutable protection for your token rights
-            </p>
-            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto lang-zh">
-                基於Solana區塊鏈的Merkle智能合約系統，為您的代幣權益提供不可篡改的保護
-            </p>
-        </div>
-    </section>
-
-    <!-- 钱包进度和价格 -->
-    <section class="py-12 px-4 bg-black bg-opacity-50">
-        <div class="container mx-auto max-w-6xl">
-            <div class="progress-section">
-                <h2 class="text-3xl md:text-4xl font-black text-center mb-6">
-                    <span class="gradient-text lang-en active">Current Sale Progress</span>
-                    <span class="gradient-text lang-zh">當前銷售進度</span>
-                </h2>
-                
-                <div class="progress-bar-container mb-6">
-                    <div class="progress-bar" style="width: 65%;">
-                        <span>65%</span>
-                    </div>
+    <!-- Header / Hero Section -->
+    <header class="relative pt-32 pb-16 px-6 md:px-8 max-w-[1920px] mx-auto border-b border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+            <div class="md:col-span-8">
+                <div class="mb-8 inline-flex items-center gap-3 border border-gray-200 rounded-full px-4 py-1.5 bg-gray-50">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse-slow"></span>
+                    <span class="text-[11px] uppercase tracking-widest font-mono font-medium text-gray-500">
+                        <span class="lang-en">Protected by Solana Smart Contract</span>
+                        <span class="lang-zh">Solana 智能合約全程保護</span>
+                    </span>
                 </div>
                 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">$0.25</div>
-                        <div class="stat-label lang-en active">Current Price</div>
-                        <div class="stat-label lang-zh">當前價格</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">650,000</div>
-                        <div class="stat-label lang-en active">Tokens Sold</div>
-                        <div class="stat-label lang-zh">已售代幣</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">1,000,000</div>
-                        <div class="stat-label lang-en active">Total Supply</div>
-                        <div class="stat-label lang-zh">總供應量</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">350,000</div>
-                        <div class="stat-label lang-en active">Remaining</div>
-                        <div class="stat-label lang-zh">剩餘額度</div>
-                    </div>
-                </div>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.95] mb-10 text-black reveal-text">
+                    <span class="lang-en">Merkle Token <br> Release Platform.</span>
+                    <span class="lang-zh">Merkle 代幣 <br> 釋放與管理平台</span>
+                </h1>
                 
-                <div class="info-box mt-6">
-                    <p class="text-center text-lg font-bold lang-en active">
-                        <i class="fas fa-wallet"></i> Official Wallet Address:
-                    </p>
-                    <p class="text-center text-lg font-bold lang-zh">
-                        <i class="fas fa-wallet"></i> 官方錢包地址:
-                    </p>
-                    <div class="mt-4 space-y-4">
-                        <div>
-                            <p class="font-bold mb-2 lang-en active" style="color: var(--accent);">Solana Network (SPL Tokens)</p>
-                            <p class="font-bold mb-2 lang-zh" style="color: var(--accent);">Solana 網絡 (SPL 代幣)</p>
-                            <p style="color: var(--accent); font-family: monospace; word-break: break-all;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</p>
-                        </div>
-                        <div>
-                            <p class="font-bold mb-2 lang-en active" style="color: var(--accent);">BNB Smart Chain (BEP20)</p>
-                            <p class="font-bold mb-2 lang-zh" style="color: var(--accent);">BNB 智能鏈 (BEP20)</p>
-                            <p style="color: var(--accent); font-family: monospace; word-break: break-all;">0xc059dc798ec9f31e765d9cccffd2c62b993857c9</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 关键规则强调 -->
-    <section class="py-12 px-4">
-        <div class="container mx-auto max-w-5xl">
-            <div class="warning-box">
-                <h2 class="text-3xl font-black mb-6 flex items-center gap-3">
-                    <i class="fas fa-exclamation-triangle text-warning text-4xl"></i>
-                    <span class="lang-en active">IMPORTANT RULES - Please Read Carefully</span>
-                    <span class="lang-zh">重要規則 - 請務必仔細閱讀</span>
-                </h2>
-                
-                <div class="rule-item">
-                    <strong class="lang-en active">❌ Non-transferable | Non-cancellable</strong>
-                    <strong class="lang-zh">❌ 不可轉讓 | 不可取消</strong>
-                    <p class="mt-2 lang-en active">Cannot be transferred to others or cancelled after purchase. Please confirm your decision.</p>
-                    <p class="mt-2 lang-zh">購買後無法轉讓給他人，也無法取消交易。請確認您的決定。</p>
-                </div>
-                
-                <div class="rule-item">
-                    <strong class="lang-en active">🔒 Locked Release</strong>
-                    <strong class="lang-zh">🔒 鎖定釋放</strong>
-                    <p class="mt-2 lang-en active">
-                        <span style="color: var(--accent); font-weight: 700;">AIF-VIP:</span> 10% unlocked on Mar 3, 2026, remaining 90% locked for 3 months then released daily over 12 months<br>
-                        <span style="color: var(--gold); font-weight: 700;">AIF-Captain:</span> Full amount locked for 6 months, then released weekly over 18 months
-                    </p>
-                    <p class="mt-2 lang-zh">
-                        <span style="color: var(--accent); font-weight: 700;">AIF-VIP:</span> 2026年3月3日解鎖10%，剩餘90%鎖定3個月後按天釋放，12個月釋放完畢<br>
-                        <span style="color: var(--gold); font-weight: 700;">AIF-Captain:</span> 全額鎖定6個月，之後按週釋放，18個月釋放完畢
-                    </p>
-                </div>
-                
-                <div class="rule-item">
-                    <strong class="lang-en active">📧 Official Confirmation Email is Your Only Proof</strong>
-                    <strong class="lang-zh">📧 官方確認郵件是您的唯一憑證</strong>
-                    <p class="mt-2 lang-en active">You must receive official email and receipt after payment - this is your only proof for Merkle contract participation.</p>
-                    <p class="mt-2 lang-zh">付款後必須收到官方郵件和收款憑證，這是您參與Merkle合約的唯一憑證。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 完整购买流程 -->
-    <section class="py-20 px-4" id="process">
-        <div class="container mx-auto max-w-6xl">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-black mb-4">
-                    <span class="gradient-text lang-en active">Complete Purchase Process</span>
-                    <span class="gradient-text lang-zh">完整購買流程</span>
-                </h2>
-                <p class="text-xl text-gray-300 lang-en active">Six steps to ensure your rights are fully protected</p>
-                <p class="text-xl text-gray-300 lang-zh">六個步驟，確保您的權益得到完整保護</p>
-            </div>
-
-            <div class="timeline">
-                <!-- 步骤 1 -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <div class="process-step">
-                        <h3 class="text-2xl font-bold mb-3 lang-en active">Step 1: Prepare Solana Wallet</h3>
-                        <h3 class="text-2xl font-bold mb-3 lang-zh">步驟 1: 準備Solana錢包</h3>
-                        <p class="text-gray-300 mb-4 lang-en active">
-                            Download and create Phantom wallet or other Solana-compatible wallet.<br>
-                            <strong style="color: var(--warning);">Please keep your wallet address and seed phrase safe!</strong>
-                        </p>
-                        <p class="text-gray-300 mb-4 lang-zh">
-                            下載並創建Phantom錢包或其他支持Solana的錢包。<br>
-                            <strong style="color: var(--warning);">請務必保存好您的錢包地址和助記詞！</strong>
-                        </p>
-                        <a href="https://phantom.app/download" target="_blank" class="btn-primary">
-                            <i class="fas fa-download"></i>
-                            <span class="lang-en active">Download Phantom Wallet</span>
-                            <span class="lang-zh">下載 Phantom 錢包</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 步骤 2 -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <div class="process-step">
-                        <h3 class="text-2xl font-bold mb-3 lang-en active">Step 2: Choose Payment Method and Complete Payment</h3>
-                        <h3 class="text-2xl font-bold mb-3 lang-zh">步驟 2: 選擇支付方式並完成付款</h3>
-                        
-                        <div class="info-box">
-                            <h4 class="font-bold text-xl mb-3 lang-en active">💳 Fiat Payment (Credit Card/Bank Transfer)</h4>
-                            <h4 class="font-bold text-xl mb-3 lang-zh">💳 法幣支付 (信用卡/銀行轉賬)</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <a href="https://wise.com/pay/r/zF91psgm9CWOjHc" target="_blank" class="payment-btn">
-                                    <div class="payment-icon">💵</div>
-                                    <div class="text-xl font-bold lang-en active">USD Payment</div>
-                                    <div class="text-xl font-bold lang-zh">美元支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">$2,500</div>
-                                </a>
-                                <a href="https://wise.com/pay/r/Ax8qZLwr6gZcVlE" target="_blank" class="payment-btn">
-                                    <div class="payment-icon">🇭🇰</div>
-                                    <div class="text-xl font-bold lang-en active">HKD Payment</div>
-                                    <div class="text-xl font-bold lang-zh">港元支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">HK$19,500</div>
-                                </a>
-                                <a href="https://wise.com/pay/r/s2pKKoaeqQ6Scsk" target="_blank" class="payment-btn">
-                                    <div class="payment-icon">🇨🇳</div>
-                                    <div class="text-xl font-bold lang-en active">CNY Payment</div>
-                                    <div class="text-xl font-bold lang-zh">人民幣支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">¥17,800</div>
-                                </a>
-                                <a href="https://wise.com/pay/r/0id4ad2UT0bkljM" target="_blank" class="payment-btn">
-                                    <div class="payment-icon">🇯🇵</div>
-                                    <div class="text-xl font-bold lang-en active">JPY Payment</div>
-                                    <div class="text-xl font-bold lang-zh">日元支付</div>
-                                    <div class="text-2xl font-black" style="color: var(--accent);">¥387,000</div>
-                                </a>
-                            </div>
-                            <p class="text-sm text-gray-400 lang-en active">
-                                💳 Accept MASTERCARD, VISA, APPLE PAY<br>
-                                Fee: Domestic Card 2.78% + 1.98 HKD | Foreign Card 3.58% + 1.98 HKD
-                            </p>
-                            <p class="text-sm text-gray-400 lang-zh">
-                                💳 接受 MASTERCARD、VISA、APPLE PAY<br>
-                                手續費: 國內卡 2.78% + 1.98 HKD | 境外卡 3.58% + 1.98 HKD
-                            </p>
-                        </div>
-
-                        <div class="info-box mt-4">
-                            <h4 class="font-bold text-xl mb-3 lang-en active">💰 Cryptocurrency Payment (USDT / USDC)</h4>
-                            <h4 class="font-bold text-xl mb-3 lang-zh">💰 加密貨幣支付 (USDT / USDC)</h4>
-                            
-                            <div class="info-box">
-                                <h5 class="font-bold text-lg mb-2 lang-en active" style="color: var(--accent);">Solana Network (SPL Tokens)</h5>
-                                <h5 class="font-bold text-lg mb-2 lang-zh" style="color: var(--accent);">Solana 網絡 (SPL 代幣)</h5>
-                                <div class="wallet-address-box">
-                                    <p id="solana-wallet-address" style="flex: 1; font-family: monospace;">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</p>
-                                    <button class="copy-btn" onclick="copySolanaWalletAddress()">
-                                        <i class="fas fa-copy"></i> <span class="lang-en active">Copy</span><span class="lang-zh">複製</span>
-                                    </button>
-                                </div>
-                                <p class="font-bold lang-en active" style="color: var(--warning);">⚠️ Solana Network Only! Do not use other networks</p>
-                                <p class="font-bold lang-zh" style="color: var(--warning);">⚠️ 僅支持 Solana 網絡！請勿使用其他網絡轉賬</p>
-                            </div>
-                            
-                            <div class="info-box mt-4">
-                                <h5 class="font-bold text-lg mb-2 lang-en active" style="color: var(--accent);">BNB Smart Chain (BEP20)</h5>
-                                <h5 class="font-bold text-lg mb-2 lang-zh" style="color: var(--accent);">BNB 智能鏈 (BEP20)</h5>
-                                <div class="wallet-address-box">
-                                    <p id="bsc-wallet-address" style="flex: 1; font-family: monospace;">0xc059dc798ec9f31e765d9cccffd2c62b993857c9</p>
-                                    <button class="copy-btn" onclick="copyBSCWalletAddress()">
-                                        <i class="fas fa-copy"></i> <span class="lang-en active">Copy</span><span class="lang-zh">複製</span>
-                                    </button>
-                                </div>
-                                <p class="font-bold lang-en active" style="color: var(--warning);">⚠️ BSC (BEP20) Network Only! Do not use other networks</p>
-                                <p class="font-bold lang-zh" style="color: var(--warning);">⚠️ 僅支持 BSC (BEP20) 網絡！請勿使用其他網絡轉賬</p>
-                            </div>
-                            
-                            <div class="warning-box mt-4">
-                                <p class="font-bold text-lg lang-en active">
-                                    <i class="fas fa-exclamation-triangle"></i> 
-                                    Please check network selection: BSC BNB Smart Chain (BEP20)
-                                </p>
-                                <p class="font-bold text-lg lang-zh">
-                                    <i class="fas fa-exclamation-triangle"></i> 
-                                    請注意核對網絡選擇: BSC BNB 智能鏈 (BEP20)
-                                </p>
-                                <p class="text-sm mt-2 lang-en active">
-                                    (Please note, only the deposit networks supported by Binance are shown here. If you use networks not supported by Binance for deposit, it may lead to asset loss.)
-                                </p>
-                                <p class="text-sm mt-2 lang-zh">
-                                    (請注意，這裡僅展示了幣安平台所支持的充幣網絡，如果您使用幣安不支持的其他網絡充幣，將可能導致資產損失。)
-                                </p>
-                            </div>
-                            
-                            <p class="text-sm text-gray-400 mt-2 lang-en active">Amount: 2,500 USDT or USDC</p>
-                            <p class="text-sm text-gray-400 mt-2 lang-zh">金額: 2,500 USDT 或 USDC</p>
-                        </div>
-
-                        <div class="warning-box mt-4">
-                            <p class="font-bold text-lg lang-en active">
-                                <i class="fas fa-camera"></i> After payment, please save the payment screenshot!
-                            </p>
-                            <p class="font-bold text-lg lang-zh">
-                                <i class="fas fa-camera"></i> 完成支付後，請務必保存付款截圖！
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 步骤 3 -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="process-step">
-                        <h3 class="text-2xl font-bold mb-3 lang-en active">Step 3: Send Payment Info to Official Email</h3>
-                        <h3 class="text-2xl font-bold mb-3 lang-zh">步驟 3: 發送付款信息至官方郵箱</h3>
-                        
-                        <div class="highlight-box">
-                            <h4 class="text-2xl font-black mb-4 flex items-center justify-center gap-2">
-                                <i class="fas fa-envelope-open-text" style="color: var(--gold);"></i>
-                                <span style="color: var(--gold);">genesis@aif.market</span>
-                            </h4>
-                            <p class="text-center text-xl font-bold lang-en active">This is the only official email</p>
-                            <p class="text-center text-xl font-bold lang-zh">這是官方唯一指定郵箱</p>
-                        </div>
-
-                        <div class="success-box">
-                            <h4 class="font-bold text-xl mb-3 lang-en active">📧 Email must include:</h4>
-                            <h4 class="font-bold text-xl mb-3 lang-zh">📧 郵件必須包含以下信息：</h4>
-                            <ul class="space-y-3 text-lg">
-                                <li class="lang-en active">✅ <strong>Payment Screenshot</strong> - Clearly showing amount and time</li>
-                                <li class="lang-zh">✅ <strong>付款截圖</strong> - 清晰顯示付款金額和時間</li>
-                                <li class="lang-en active">✅ <strong>Your Solana Wallet Address</strong> - For receiving AIF tokens</li>
-                                <li class="lang-zh">✅ <strong>您的Solana錢包地址</strong> - 用於接收AIF代幣</li>
-                                <li class="lang-en active">✅ <strong>Purchase Quantity</strong> - 10,000 AIF</li>
-                                <li class="lang-zh">✅ <strong>購買數量</strong> - 10,000 AIF</li>
-                                <li class="lang-en active">✅ <strong>Contact Email</strong> - For receiving confirmation</li>
-                                <li class="lang-zh">✅ <strong>聯繫郵箱</strong> - 用於接收確認郵件</li>
-                            </ul>
-                        </div>
-
-                        <div class="warning-box">
-                            <p class="font-bold lang-en active">
-                                ⏰ Please send email within 24 hours after payment to ensure timely confirmation
-                            </p>
-                            <p class="font-bold lang-zh">
-                                ⏰ 請在付款後24小時內發送郵件，否則可能影響您的權益確認
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 步骤 4 -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="process-step">
-                        <h3 class="text-2xl font-bold mb-3 lang-en active">Step 4: Receive Official Confirmation Email & Receipt</h3>
-                        <h3 class="text-2xl font-bold mb-3 lang-zh">步驟 4: 收到官方確認郵件和收款憑證</h3>
-                        
-                        <div class="success-box">
-                            <h4 class="font-bold text-xl mb-4 lang-en active">
-                                <i class="fas fa-shield-alt" style="color: var(--trust-green);"></i> 
-                                This is your most important proof of rights!
-                            </h4>
-                            <h4 class="font-bold text-xl mb-4 lang-zh">
-                                <i class="fas fa-shield-alt" style="color: var(--trust-green);"></i> 
-                                這是您最重要的權益憑證！
-                            </h4>
-                            <p class="text-gray-300 lang-en active">
-                                After the official team reviews your payment, you will receive within <strong style="color: var(--accent);">48 hours</strong>:
-                            </p>
-                            <p class="text-gray-300 lang-zh">
-                                官方團隊審核您的付款信息後，將在 <strong style="color: var(--accent);">48小時內</strong> 向您發送：
-                            </p>
-                            <ul class="mt-4 space-y-2 text-lg">
-                                <li class="lang-en active">📧 <strong>Official Confirmation Email</strong> - Confirming your purchase</li>
-                                <li class="lang-zh">📧 <strong>官方確認郵件</strong> - 確認您的購買已成功</li>
-                                <li class="lang-en active">🧾 <strong>Official Receipt</strong> - Including all transaction details</li>
-                                <li class="lang-zh">🧾 <strong>官方收款憑證</strong> - 包含所有交易詳情</li>
-                            </ul>
-                        </div>
-
-                        <!-- 收据样式示例 -->
-                        <div class="receipt-template">
-                            <div class="official-stamp">
-                                <div>
-                                    <div style="font-size: 1.2rem;">AIF</div>
-                                    <div style="font-size: 0.8rem;">OFFICIAL</div>
-                                    <div style="font-size: 0.7rem; margin-top: 0.2rem;" class="lang-en active">VERIFIED</div>
-                                    <div style="font-size: 0.7rem; margin-top: 0.2rem;" class="lang-zh">已驗證</div>
-                                </div>
-                            </div>
-                            
-                            <div class="receipt-header">
-                                <div class="logo-font text-3xl mb-2">AIF MERKLE</div>
-                                <p class="text-gray-400 lang-en active">Official Payment Receipt</p>
-                                <p class="text-gray-400 lang-zh">官方收款憑證</p>
-                                <p class="text-sm text-gray-500 mt-2">Receipt #: AIF-2026-XXXXX</p>
-                            </div>
-
-                            <div class="receipt-row">
-                                <span class="receipt-label lang-en active">Purchase Quantity</span>
-                                <span class="receipt-label lang-zh">購買數量</span>
-                                <span class="receipt-value">10,000 AIF</span>
-                            </div>
-                            
-                            <div class="receipt-row">
-                                <span class="receipt-label lang-en active">Unit Price</span>
-                                <span class="receipt-label lang-zh">單價</span>
-                                <span class="receipt-value">$0.25</span>
-                            </div>
-                            
-                            <div class="receipt-row">
-                                <span class="receipt-label lang-en active">Payment Amount</span>
-                                <span class="receipt-label lang-zh">支付金額</span>
-                                <span class="receipt-value">$2,500.00</span>
-                            </div>
-                            
-                            <div class="receipt-row">
-                                <span class="receipt-label lang-en active">Wallet Address</span>
-                                <span class="receipt-label lang-zh">錢包地址</span>
-                                <span class="receipt-value" style="font-size: 0.9rem; word-break: break-all;">3QBg...STLV</span>
-                            </div>
-                            
-                            <div class="receipt-row">
-                                <span class="receipt-label lang-en active">Transaction Time</span>
-                                <span class="receipt-label lang-zh">交易時間</span>
-                                <span class="receipt-value">2025-11-13 14:30:00</span>
-                            </div>
-                            
-                            <div class="receipt-row">
-                                <span class="receipt-label lang-en active">Merkle Status</span>
-                                <span class="receipt-label lang-zh">Merkle狀態</span>
-                                <span class="receipt-value" style="color: var(--trust-green);">✅ <span class="lang-en active">Added</span><span class="lang-zh">已添加</span></span>
-                            </div>
-
-                            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 2px dashed rgba(255, 255, 255, 0.3);">
-                                <p class="text-sm text-gray-400 lang-en active">Please keep this receipt safe</p>
-                                <p class="text-sm text-gray-400 lang-zh">請妥善保存此憑證</p>
-                                <p class="text-xs text-gray-500 mt-2">genesis@aif.market</p>
-                            </div>
-                        </div>
-
-                        <div class="warning-box">
-                            <p class="font-bold lang-en active">
-                                <i class="fas fa-exclamation-circle"></i> 
-                                After receiving confirmation email and receipt, your rights are permanently protected by Merkle smart contract!
-                            </p>
-                            <p class="font-bold lang-zh">
-                                <i class="fas fa-exclamation-circle"></i> 
-                                收到確認郵件和憑證後，您的權益即被Merkle智能合約永久保護！
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 步骤 5 -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <div class="process-step">
-                        <h3 class="text-2xl font-bold mb-3 lang-en active">Step 5: Your Info Added to AIF Merkle Library</h3>
-                        <h3 class="text-2xl font-bold mb-3 lang-zh">步驟 5: 您的信息添加至AIF Merkle庫</h3>
-                        
-                        <div class="merkle-explain">
-                            <div class="merkle-icon">🔐</div>
-                            <h4 class="text-2xl font-black text-center mb-4 lang-en active">What is AIF Merkle Library?</h4>
-                            <h4 class="text-2xl font-black text-center mb-4 lang-zh">什麼是 AIF Merkle 庫？</h4>
-                            
-                            <p class="text-lg leading-relaxed mb-4 lang-en active">
-                                <strong style="color: var(--accent);">AIF Merkle Library</strong> is a smart contract whitelist system deployed on <strong style="color: var(--primary);">Solana blockchain</strong>. Its core functions are:
-                            </p>
-                            <p class="text-lg leading-relaxed mb-4 lang-zh">
-                                <strong style="color: var(--accent);">AIF Merkle庫</strong> 是一個部署在 <strong style="color: var(--primary);">Solana區塊鏈</strong> 上的智能合約白名單系統。它的核心功能是：
-                            </p>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-                                <div class="info-box">
-                                    <div class="text-3xl mb-2">🔒</div>
-                                    <h5 class="font-bold mb-2 lang-en active">Immutable by Both Parties</h5>
-                                    <h5 class="font-bold mb-2 lang-zh">雙方不可修改</h5>
-                                    <p class="text-sm text-gray-300 lang-en active">Once your wallet address and token amount are written to Merkle tree, no one can modify it</p>
-                                    <p class="text-sm text-gray-300 lang-zh">一旦您的錢包地址和代幣數量被寫入Merkle樹，任何人都無法修改</p>
-                                </div>
-                                <div class="info-box">
-                                    <div class="text-3xl mb-2">❌</div>
-                                    <h5 class="font-bold mb-2 lang-en active">Non-revocable</h5>
-                                    <h5 class="font-bold mb-2 lang-zh">不可撤銷</h5>
-                                    <p class="text-sm text-gray-300 lang-en active">Official cannot revoke your rights, and you cannot cancel purchase</p>
-                                    <p class="text-sm text-gray-300 lang-zh">官方無法撤銷您的權益，您也無法取消購買</p>
-                                </div>
-                                <div class="info-box">
-                                    <div class="text-3xl mb-2">⏰</div>
-                                    <h5 class="font-bold mb-2 lang-en active">Auto Release</h5>
-                                    <h5 class="font-bold mb-2 lang-zh">自動釋放</h5>
-                                    <p class="text-sm text-gray-300 lang-en active">Tokens will be automatically released to your wallet according to contract rules</p>
-                                    <p class="text-sm text-gray-300 lang-zh">到期後代幣會按照合約規則自動釋放到您的錢包</p>
-                                </div>
-                            </div>
-
-                            <div class="success-box">
-                                <h5 class="font-bold text-xl mb-3 lang-en active">✅ Signs that you've been added to Merkle library:</h5>
-                                <h5 class="font-bold text-xl mb-3 lang-zh">✅ 確認您已添加至Merkle庫的標誌：</h5>
-                                <ul class="space-y-2">
-                                    <li class="lang-en active">📧 Received official confirmation email stating "Added to Merkle Library"</li>
-                                    <li class="lang-zh">📧 收到官方確認郵件，郵件中明確說明 "已添加至Merkle庫"</li>
-                                    <li class="lang-en active">🧾 Receipt shows Merkle Status: <span style="color: var(--trust-green);">✅ Added</span></li>
-                                    <li class="lang-zh">🧾 收款憑證上顯示 Merkle狀態: <span style="color: var(--trust-green);">✅ 已添加</span></li>
-                                    <li class="lang-en active">🔗 Can query your wallet address and token amount on official website</li>
-                                    <li class="lang-zh">🔗 可以在官網查詢到您的錢包地址和對應的代幣數量</li>
-                                </ul>
-                            </div>
-
-                            <div class="warning-box mt-4">
-                                <p class="font-bold text-lg lang-en active">
-                                    <i class="fas fa-info-circle"></i> 
-                                    Important: Only after being added to Merkle library are your token rights truly protected by blockchain!
-                                </p>
-                                <p class="font-bold text-lg lang-zh">
-                                    <i class="fas fa-info-circle"></i> 
-                                    重要提醒：只有添加至Merkle庫後，您的代幣權益才真正受到區塊鏈保護！
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 步骤 6 -->
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                    <div class="process-step">
-                        <h3 class="text-2xl font-bold mb-3 lang-en active">Step 6: Connect Wallet to Claim Tokens</h3>
-                        <h3 class="text-2xl font-bold mb-3 lang-zh">步驟 6: 到期後連接錢包領取代幣</h3>
-                        
-                        <div class="highlight-box">
-                            <h4 class="text-2xl font-black text-center mb-4 lang-en active">
-                                <i class="fas fa-calendar-check" style="color: var(--gold);"></i> 
-                                March 3, 2026 - First Unlock
-                            </h4>
-                            <h4 class="text-2xl font-black text-center mb-4 lang-zh">
-                                <i class="fas fa-calendar-check" style="color: var(--gold);"></i> 
-                                2026年3月3日 - 首次解鎖
-                            </h4>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
-                            <div class="info-box">
-                                <h5 class="text-xl font-bold mb-3" style="color: var(--accent);">
-                                    <span class="lang-en active">🙋 AIF-VIP Release Rules</span>
-                                    <span class="lang-zh">🙋 AIF-VIP 釋放規則</span>
-                                </h5>
-                                <ul class="space-y-2 text-gray-300">
-                                    <li class="lang-en active"><strong>March 3, 2026:</strong> Unlock 10% (1,000 AIF)</li>
-                                    <li class="lang-zh"><strong>2026年3月3日:</strong> 解鎖10% (1,000 AIF)</li>
-                                    <li class="lang-en active"><strong>Lock Period:</strong> Remaining 90% locked for 3 months</li>
-                                    <li class="lang-zh"><strong>鎖定期:</strong> 剩餘90%鎖定3個月</li>
-                                    <li class="lang-en active"><strong>From June 3, 2026:</strong> Daily release over 12 months</li>
-                                    <li class="lang-zh"><strong>2026年6月3日起:</strong> 每天釋放，12個月釋放完畢</li>
-                                    <li class="lang-en active"><strong>Daily Release:</strong> ~25 AIF/day</li>
-                                    <li class="lang-zh"><strong>每日釋放:</strong> 約25 AIF/天</li>
-                                </ul>
-                            </div>
-
-                            <div class="info-box">
-                                <h5 class="text-xl font-bold mb-3" style="color: var(--gold);">
-                                    <span class="lang-en active">⚓ AIF-Captain Release Rules</span>
-                                    <span class="lang-zh">⚓ AIF-Captain 釋放規則</span>
-                                </h5>
-                                <ul class="space-y-2 text-gray-300">
-                                    <li class="lang-en active"><strong>March 3, 2026:</strong> Fully locked</li>
-                                    <li class="lang-zh"><strong>2026年3月3日:</strong> 全額鎖定</li>
-                                    <li class="lang-en active"><strong>Lock Period:</strong> All tokens locked for 6 months</li>
-                                    <li class="lang-zh"><strong>鎖定期:</strong> 全部代幣鎖定6個月</li>
-                                    <li class="lang-en active"><strong>From September 3, 2026:</strong> Weekly release over 18 months</li>
-                                    <li class="lang-zh"><strong>2026年9月3日起:</strong> 每週釋放，18個月釋放完畢</li>
-                                    <li class="lang-en active"><strong>Weekly Release:</strong> ~128 AIF/week</li>
-                                    <li class="lang-zh"><strong>每週釋放:</strong> 約128 AIF/週</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="success-box">
-                            <h5 class="font-bold text-xl mb-3 lang-en active">💰 How to Claim Tokens?</h5>
-                            <h5 class="font-bold text-xl mb-3 lang-zh">💰 如何領取代幣？</h5>
-                            <ol class="space-y-3 text-lg list-decimal list-inside">
-                                <li class="lang-en active">Visit AIF Merkle official website (link will be provided in confirmation email)</li>
-                                <li class="lang-zh">訪問 AIF Merkle 官網（屆時會在確認郵件中提供鏈接）</li>
-                                <li class="lang-en active">Click "Connect Wallet" button and select your wallet</li>
-                                <li class="lang-zh">點擊 "連接錢包" 按鈕，選擇您的錢包</li>
-                                <li class="lang-en active">System automatically recognizes your address and claimable amount</li>
-                                <li class="lang-zh">系統自動識別您的地址和可領取數量</li>
-                                <li class="lang-en active">Click "Claim" button and confirm transaction</li>
-                                <li class="lang-zh">點擊 "領取" 按鈕，確認交易</li>
-                                <li class="lang-en active">Tokens will be transferred to your wallet immediately!</li>
-                                <li class="lang-zh">代幣將立即轉入您的錢包！</li>
-                            </ol>
-                        </div>
-
-                        <div class="text-center mt-6">
-                            <button class="btn-primary" style="font-size: 1.3rem; padding: 1.5rem 3rem;">
-                                <i class="fas fa-wallet"></i>
-                                <span class="lang-en active">Connect Wallet to Claim (Opens March 3, 2026)</span>
-                                <span class="lang-zh">連接錢包領取 (2026年3月3日開放)</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 信任保障 -->
-    <section class="py-20 px-4 bg-black bg-opacity-30">
-        <div class="container mx-auto max-w-6xl">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-black mb-4">
-                    <span class="gradient-text lang-en active">Why Trust AIF Merkle?</span>
-                    <span class="gradient-text lang-zh">為什麼可以信任 AIF Merkle？</span>
-                </h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card p-6">
-                    <div class="text-5xl text-center mb-4">🔗</div>
-                    <h4 class="text-xl font-bold text-center mb-3 lang-en active">Blockchain Protection</h4>
-                    <h4 class="text-xl font-bold text-center mb-3 lang-zh">區塊鏈技術保護</h4>
-                    <p class="text-gray-300 text-center lang-en active">
-                        All transaction records and rights info stored on Solana blockchain, transparent and immutable
-                    </p>
-                    <p class="text-gray-300 text-center lang-zh">
-                        所有交易記錄和權益信息都存儲在Solana區塊鏈上，公開透明，永久不可篡改
-                    </p>
-                </div>
-
-                <div class="card p-6">
-                    <div class="text-5xl text-center mb-4">📧</div>
-                    <h4 class="text-xl font-bold text-center mb-3 lang-en active">Official Confirmation</h4>
-                    <h4 class="text-xl font-bold text-center mb-3 lang-zh">官方確認保障</h4>
-                    <p class="text-gray-300 text-center lang-en active">
-                        Every transaction receives official email and receipt, ensuring peace of mind before token arrival
-                    </p>
-                    <p class="text-gray-300 text-center lang-zh">
-                        每筆交易都會收到官方郵件和收款憑證，確保您在代幣到賬前不會恐慌
-                    </p>
-                </div>
-
-                <div class="card p-6">
-                    <div class="text-5xl text-center mb-4">⚡</div>
-                    <h4 class="text-xl font-bold text-center mb-3 lang-en active">Smart Contract Auto-execution</h4>
-                    <h4 class="text-xl font-bold text-center mb-3 lang-zh">智能合約自動執行</h4>
-                    <p class="text-gray-300 text-center lang-en active">
-                        Tokens automatically released at maturity, no manual intervention, eliminating human error risks
-                    </p>
-                    <p class="text-gray-300 text-center lang-zh">
-                        到期後代幣自動釋放，無需人工干預，杜絕任何人為操作風險
-                    </p>
-                </div>
-            </div>
-
-            <div class="highlight-box mt-12">
-                <h3 class="text-2xl font-black text-center mb-4 lang-en active">
-                    <i class="fas fa-hand-holding-heart" style="color: var(--gold);"></i> 
-                    Our Promise
-                </h3>
-                <h3 class="text-2xl font-black text-center mb-4 lang-zh">
-                    <i class="fas fa-hand-holding-heart" style="color: var(--gold);"></i> 
-                    我們的承諾
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
-                    <div class="lang-en active">
-                        <p>✅ Reply all emails within 48 hours</p>
-                        <p>✅ Provide complete transaction receipts</p>
-                        <p>✅ Ensure all info added to Merkle library</p>
-                        <p>✅ Auto release at maturity, no reminder needed</p>
-                    </div>
-                    <div class="lang-zh">
-                        <p>✅ 48小時內回覆所有郵件</p>
-                        <p>✅ 提供完整的交易憑證</p>
-                        <p>✅ 確保所有信息添加至Merkle庫</p>
-                        <p>✅ 到期自動釋放，無需催促</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-20 px-4">
-        <div class="container mx-auto max-w-4xl">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-black mb-4">
-                    <span class="gradient-text lang-en active">FAQ</span>
-                    <span class="gradient-text lang-zh">常見問題</span>
-                </h2>
-            </div>
-
-            <div class="space-y-4">
-                <div class="card p-6">
-                    <h4 class="font-bold text-xl mb-2 lang-en active">❓ What if I don't receive confirmation email?</h4>
-                    <h4 class="font-bold text-xl mb-2 lang-zh">❓ 如果我沒有收到確認郵件怎麼辦？</h4>
-                    <p class="text-gray-300 lang-en active">
-                        Please check spam folder first. If still not received after 72 hours, send another email to genesis@aif.market with "No confirmation received".
-                    </p>
-                    <p class="text-gray-300 lang-zh">
-                        請先檢查垃圾郵件文件夾。如果72小時內仍未收到，請再次發送郵件至 genesis@aif.market 並註明"未收到確認"。
-                    </p>
-                </div>
-
-                <div class="card p-6">
-                    <h4 class="font-bold text-xl mb-2 lang-en active">❓ Can I change the wallet address for receiving tokens?</h4>
-                    <h4 class="font-bold text-xl mb-2 lang-zh">❓ 我可以更改接收代幣的錢包地址嗎？</h4>
-                    <p class="text-gray-300 lang-en active">
-                        Once added to Merkle library, wallet address cannot be changed. Please double-check your wallet address when sending email.
-                    </p>
-                    <p class="text-gray-300 lang-zh">
-                        一旦添加至Merkle庫，錢包地址無法更改。請在發送郵件時務必確認錢包地址正確。
-                    </p>
-                </div>
-
-                <div class="card p-6">
-                    <h4 class="font-bold text-xl mb-2 lang-en active">❓ Will tokens be automatically sent to wallet?</h4>
-                    <h4 class="font-bold text-xl mb-2 lang-zh">❓ 代幣會自動發送到錢包嗎？</h4>
-                    <p class="text-gray-300 lang-en active">
-                        No. You need to actively connect your wallet to AIF Merkle official website to claim after unlock date.
-                    </p>
-                    <p class="text-gray-300 lang-zh">
-                        不會。您需要在解鎖日期後主動連接錢包到AIF Merkle官網進行領取。
-                    </p>
-                </div>
-
-                <div class="card p-6">
-                    <h4 class="font-bold text-xl mb-2 lang-en active">❓ How to verify my info is added to Merkle library?</h4>
-                    <h4 class="font-bold text-xl mb-2 lang-zh">❓ 如何驗證我的信息已添加至Merkle庫？</h4>
-                    <p class="text-gray-300 lang-en active">
-                        After receiving official confirmation email, it will include a query link. You can use it to check your token amount and release schedule by entering wallet address.
-                    </p>
-                    <p class="text-gray-300 lang-zh">
-                        收到官方確認郵件後，郵件中會包含查詢鏈接。您可以通過該鏈接輸入錢包地址查看您的代幣數量和釋放時間表。
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 页脚 - HKAIIFF生态链接 -->
-    <footer class="bg-black bg-opacity-50 py-12 px-4 border-t border-gray-800">
-        <div class="container mx-auto">
-            <div class="text-center mb-8">
-                <div class="logo-font text-4xl mb-4">AIF MERKLE</div>
-                <p class="text-gray-400 text-xl mb-4">
-                    <i class="fas fa-envelope"></i> genesis@aif.market
+                <p class="text-lg md:text-xl text-gray-500 max-w-2xl leading-relaxed font-light reveal-text delay-100">
+                    <span class="lang-en">Merkle Smart Contract System on Solana Blockchain provides immutable protection for your token rights. Secure, Trusted, and Automated.</span>
+                    <span class="lang-zh">基於 Solana 區塊鏈的 Merkle 智能合約系統，為您的代幣權益提供不可篡改的保護。安全、可信、自動化執行。</span>
                 </p>
-                <div class="flex justify-center gap-6 mb-6 flex-wrap">
-                    <div class="trust-badge">
-                        <i class="fas fa-shield-check"></i>
-                        <span class="lang-en active">Protected by Solana</span>
-                        <span class="lang-zh">Solana 區塊鏈保護</span>
+
+                <div class="mt-10 flex flex-wrap gap-4 reveal-text delay-200">
+                    <div class="flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
+                        <i class="fas fa-shield-alt text-green-600"></i>
+                        <span class="lang-en">Immutable Rights</span><span class="lang-zh">權益不可篡改</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
+                        <i class="fas fa-bolt text-yellow-500"></i>
+                        <span class="lang-en">Auto Release</span><span class="lang-zh">自動釋放</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
+                        <i class="fas fa-search text-blue-500"></i>
+                        <span class="lang-en">On-Chain Verifiable</span><span class="lang-zh">鏈上可查</span>
                     </div>
                 </div>
             </div>
 
-            <div class="max-w-6xl mx-auto">
-                <h3 class="text-2xl font-bold text-center mb-6">
-                    <span class="gradient-text lang-en active">HKAIIFF Ecosystem</span>
-                    <span class="gradient-text lang-zh">HKAIIFF 生態系統</span>
-                </h3>
+            <!-- Stats Grid (Replacing the visual progress bar with a data grid) -->
+            <div class="md:col-span-4 flex flex-col justify-end reveal-text delay-300">
+                <div class="bg-white border border-black rounded-xl overflow-hidden shadow-2xl">
+                    <div class="bg-black text-white p-4 flex justify-between items-center">
+                        <span class="text-xs font-mono uppercase tracking-widest"><span class="lang-en">Sale Progress</span><span class="lang-zh">銷售進度</span></span>
+                        <span class="font-mono font-bold">65%</span>
+                    </div>
+                    <div class="h-1 w-full bg-gray-800">
+                        <div class="h-full bg-white w-[65%]"></div>
+                    </div>
+                    <div class="grid grid-cols-2 divide-x divide-gray-200 border-b border-gray-200">
+                        <div class="p-6">
+                            <span class="block text-3xl font-bold mb-1 font-mono">$0.25</span>
+                            <span class="text-[10px] uppercase font-mono text-gray-400"><span class="lang-en">Current Price</span><span class="lang-zh">當前價格</span></span>
+                        </div>
+                        <div class="p-6">
+                            <span class="block text-3xl font-bold mb-1 font-mono">650k</span>
+                            <span class="text-[10px] uppercase font-mono text-gray-400"><span class="lang-en">Tokens Sold</span><span class="lang-zh">已售代幣</span></span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 divide-x divide-gray-200">
+                        <div class="p-6">
+                            <span class="block text-2xl font-bold mb-1 font-mono">1.0M</span>
+                            <span class="text-[10px] uppercase font-mono text-gray-400"><span class="lang-en">Total Supply</span><span class="lang-zh">總供應量</span></span>
+                        </div>
+                        <div class="p-6">
+                            <span class="block text-2xl font-bold mb-1 font-mono text-gray-400">350k</span>
+                            <span class="text-[10px] uppercase font-mono text-gray-400"><span class="lang-en">Remaining</span><span class="lang-zh">剩餘額度</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Marquee Tape -->
+    <div class="border-b border-gray-200 py-4 overflow-hidden bg-gray-50">
+        <div class="whitespace-nowrap animate-marquee flex items-center gap-12 text-xs font-mono font-medium uppercase tracking-widest text-gray-400">
+            <span>Official Wallet Address</span> <span>✦</span> <span>3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</span> <span>✦</span>
+            <span>官方錢包地址</span> <span>✦</span> <span>3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</span> <span>✦</span>
+            <span>Official Wallet Address</span> <span>✦</span> <span>3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</span> <span>✦</span>
+            <span>官方錢包地址</span> <span>✦</span> <span>3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</span> <span>✦</span>
+        </div>
+    </div>
+
+    <!-- Official Wallets Section -->
+    <section id="progress" class="py-24 px-6 md:px-8 max-w-[1920px] mx-auto border-b border-gray-200 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
+            <div class="md:col-span-4 reveal-text">
+                <h2 class="text-3xl font-bold tracking-tight mb-6">
+                    <span class="lang-en">Official Wallet.</span>
+                    <span class="lang-zh">官方錢包地址</span>
+                </h2>
+                <div class="p-6 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <h3 class="font-bold text-yellow-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="lang-en">Important</span><span class="lang-zh">重要提示</span>
+                    </h3>
+                    <p class="text-sm text-yellow-700 leading-relaxed">
+                        <span class="lang-en">Please check the network selection carefully. Using unsupported networks may result in asset loss.</span>
+                        <span class="lang-zh">請注意核對網絡選擇。使用不支持的網絡充幣將可能導致資產損失。</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="md:col-span-8 space-y-6 reveal-text delay-100">
+                <!-- Solana Wallet -->
+                <div class="group relative bg-white border border-gray-200 rounded-xl p-8 hover:border-black transition-all duration-300 shadow-sm hover:shadow-xl">
+                    <div class="absolute top-0 right-0 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl font-mono">RECOMMENDED</div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-lg">
+                            <i class="fab fa-ethereum"></i> <!-- Using generic crypto icon or solana if available -->
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg"><span class="lang-en">Solana Network (SPL)</span><span class="lang-zh">Solana 網絡 (SPL 代幣)</span></h3>
+                            <p class="text-xs text-gray-500 font-mono">USDT / USDC</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-start md:items-center bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <code id="solana-wallet-address" class="flex-1 font-mono text-sm break-all text-gray-600 select-all">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</code>
+                        <button onclick="copySolanaWalletAddress()" class="shrink-0 px-4 py-2 bg-white border border-gray-200 hover:bg-black hover:text-white hover:border-black rounded text-xs font-bold uppercase transition-colors flex items-center gap-2">
+                            <i class="fas fa-copy"></i> <span class="lang-en">Copy</span><span class="lang-zh">複製</span>
+                        </button>
+                    </div>
+                    <p class="mt-4 text-xs font-medium text-red-500 flex items-center gap-2">
+                        <i class="fas fa-ban"></i>
+                        <span class="lang-en">Solana Network Only! Do not use other networks.</span>
+                        <span class="lang-zh">僅支持 Solana 網絡！請勿使用其他網絡轉賬。</span>
+                    </p>
+                </div>
+
+                <!-- BSC Wallet -->
+                <div class="group relative bg-white border border-gray-200 rounded-xl p-8 hover:border-black transition-all duration-300 shadow-sm hover:shadow-xl">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-yellow-400 text-black flex items-center justify-center text-lg">
+                            <i class="fab fa-bitcoin"></i> <!-- Generic crypto icon -->
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg"><span class="lang-en">BNB Smart Chain (BEP20)</span><span class="lang-zh">BNB 智能鏈 (BEP20)</span></h3>
+                            <p class="text-xs text-gray-500 font-mono">USDT / USDC</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4 items-start md:items-center bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <code id="bsc-wallet-address" class="flex-1 font-mono text-sm break-all text-gray-600 select-all">0xc059dc798ec9f31e765d9cccffd2c62b993857c9</code>
+                        <button onclick="copyBSCWalletAddress()" class="shrink-0 px-4 py-2 bg-white border border-gray-200 hover:bg-black hover:text-white hover:border-black rounded text-xs font-bold uppercase transition-colors flex items-center gap-2">
+                            <i class="fas fa-copy"></i> <span class="lang-en">Copy</span><span class="lang-zh">複製</span>
+                        </button>
+                    </div>
+                    <p class="mt-4 text-xs font-medium text-red-500 flex items-center gap-2">
+                        <i class="fas fa-ban"></i>
+                        <span class="lang-en">BSC (BEP20) Network Only!</span>
+                        <span class="lang-zh">僅支持 BSC (BEP20) 網絡！</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Important Rules Section (Stylized as strict data blocks) -->
+    <section id="rules" class="py-24 px-6 md:px-8 max-w-[1920px] mx-auto bg-gray-50">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal-text">
+            <div>
+                <h2 class="text-3xl font-bold tracking-tight mb-2"><span class="lang-en">Crucial Rules</span><span class="lang-zh">關鍵規則</span></h2>
+                <p class="text-gray-500 font-mono text-xs uppercase tracking-wider"><span class="lang-en">Please read carefully</span><span class="lang-zh">請務必仔細閱讀</span></p>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <span class="inline-flex items-center gap-2 px-3 py-1 bg-red-100 text-red-600 rounded text-xs font-bold uppercase">
+                    <span class="w-2 h-2 rounded-full bg-red-600"></span>
+                    <span class="lang-en">Strict Enforcement</span><span class="lang-zh">嚴格執行</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-text delay-100">
+            <!-- Rule 1 -->
+            <div class="bg-white p-8 rounded-xl border border-gray-200 hover:border-red-400 transition-colors group">
+                <div class="text-2xl mb-6 text-red-500 group-hover:scale-110 transition-transform origin-left"><i class="fas fa-times-circle"></i></div>
+                <h3 class="text-lg font-bold mb-3"><span class="lang-en">Non-transferable</span><span class="lang-zh">不可轉讓</span></h3>
+                <p class="text-sm text-gray-500 leading-relaxed mb-4">
+                    <span class="lang-en">Cannot be transferred to others or cancelled after purchase. Please confirm your decision.</span>
+                    <span class="lang-zh">購買後無法轉讓給他人，也無法取消交易。請確認您的決定。</span>
+                </p>
+            </div>
+
+            <!-- Rule 2 - Modified Dates and Details -->
+            <div class="bg-white p-8 rounded-xl border border-gray-200 hover:border-black transition-colors group">
+                <div class="text-2xl mb-6 text-black group-hover:scale-110 transition-transform origin-left"><i class="fas fa-lock"></i></div>
+                <h3 class="text-lg font-bold mb-3"><span class="lang-en">Locked Release</span><span class="lang-zh">鎖定釋放</span></h3>
                 
-                <div class="footer-links">
-                    <div class="footer-link-card">
-                        <h4 class="font-bold mb-2 lang-en active">Hong Kong AI International Film Festival</h4>
-                        <h4 class="font-bold mb-2 lang-zh">香港AI國際電影節</h4>
-                        <a href="http://www.hkaiiff.org" target="_blank">
-                            <i class="fas fa-film"></i>
-                            <span>www.hkaiiff.org</span>
-                        </a>
+                <div class="space-y-4">
+                    <div class="p-4 bg-gray-50 rounded border border-gray-100 hover:bg-gray-100 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="text-xs font-bold uppercase text-black">AIF-VIP</div>
+                            <div class="text-[10px] font-mono bg-black text-white px-1.5 py-0.5 rounded">Option A</div>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed mb-2">
+                            <strong class="block text-black mb-1"><span class="lang-en">First Unlock: Mar 20, 2026</span><span class="lang-zh">首次解鎖: 2026年3月20日</span></strong>
+                            <span class="lang-en">10% unlocked on Mar 20, 2026. Remaining 90% locked for 3 months, then released daily over 12 months.</span>
+                            <span class="lang-zh">2026年3月20日解鎖10%。剩餘90%鎖定3個月，隨後按天釋放，12個月內釋放完畢。</span>
+                        </p>
                     </div>
-
-                    <div class="footer-link-card">
-                        <h4 class="font-bold mb-2 lang-en active">Hong Kong AI Film Market</h4>
-                        <h4 class="font-bold mb-2 lang-zh">香港AI電影市場</h4>
-                        <a href="http://www.aif.market" target="_blank">
-                            <i class="fas fa-store"></i>
-                            <span>www.aif.market</span>
-                        </a>
-                    </div>
-
-                    <div class="footer-link-card">
-                        <h4 class="font-bold mb-2 lang-en active">Hong Kong AI Film Academy</h4>
-                        <h4 class="font-bold mb-2 lang-zh">香港AI電影學院</h4>
-                        <a href="http://www.hkaifa.academy" target="_blank">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>www.hkaifa.academy</span>
-                        </a>
-                    </div>
-
-                    <div class="footer-link-card">
-                        <h4 class="font-bold mb-2 lang-en active">HKAIIFF Global Submission Center</h4>
-                        <h4 class="font-bold mb-2 lang-zh">香港AI國際電影節全球徵片中心</h4>
-                        <a href="http://www.aif.center" target="_blank">
-                            <i class="fas fa-globe"></i>
-                            <span>www.aif.center</span>
-                        </a>
+                    <div class="p-4 bg-black text-white rounded border border-black hover:bg-gray-900 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="text-xs font-bold uppercase text-yellow-400">AIF-Captain</div>
+                            <div class="text-[10px] font-mono bg-white text-black px-1.5 py-0.5 rounded">Option B</div>
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            <strong class="block text-white mb-1"><span class="lang-en">Lock Start: Mar 20, 2026</span><span class="lang-zh">鎖定開始: 2026年3月20日</span></strong>
+                            <span class="lang-en">Fully locked on Mar 20. Total 6 months lock-up period, then released weekly over 18 months.</span>
+                            <span class="lang-zh">3月20日全額鎖定。總鎖定期6個月，隨後按週釋放，18個月內釋放完畢。</span>
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-8">
-                <p class="text-gray-500 text-sm">&copy; 2025 AIF Merkle Token Release Platform. All Rights Reserved.</p>
+            <!-- Rule 3 -->
+            <div class="bg-white p-8 rounded-xl border border-gray-200 hover:border-black transition-colors group">
+                <div class="text-2xl mb-6 text-black group-hover:scale-110 transition-transform origin-left"><i class="fas fa-envelope-open-text"></i></div>
+                <h3 class="text-lg font-bold mb-3"><span class="lang-en">Email Proof</span><span class="lang-zh">郵件憑證</span></h3>
+                <p class="text-sm text-gray-500 leading-relaxed mb-4">
+                    <span class="lang-en">You must receive official email and receipt after payment - this is your only proof for Merkle contract participation.</span>
+                    <span class="lang-zh">付款後必須收到官方郵件和收款憑證，這是您參與 Merkle 合約的唯一憑證。</span>
+                </p>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs font-mono font-bold text-gray-400">genesis@aif.market</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Purchase Process Timeline -->
+    <section id="process" class="py-24 px-6 md:px-8 max-w-[1920px] mx-auto border-b border-gray-200">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div class="reveal-text sticky top-32 h-fit">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+                    <span class="lang-en">Purchase <br>Workflow.</span>
+                    <span class="lang-zh">完整 <br>購買流程</span>
+                </h2>
+                <p class="text-gray-500 text-lg mb-8">
+                    <span class="lang-en">Six steps to ensure your rights are fully protected. Follow this guide to participate in the genesis issuance.</span>
+                    <span class="lang-zh">六個步驟，確保您的權益得到完整保護。請遵循此指南參與創世發行。</span>
+                </p>
+                <div class="hidden lg:block">
+                    <div class="inline-block p-6 bg-black text-white rounded-xl shadow-2xl">
+                        <div class="text-sm font-mono opacity-50 mb-2">OFFICIAL EMAIL</div>
+                        <div class="text-xl font-bold">genesis@aif.market</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-16 reveal-text delay-100">
+                <!-- Step 1 -->
+                <div class="relative pl-8 border-l border-gray-200">
+                    <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-black rounded-full ring-4 ring-white"></span>
+                    <span class="text-xs font-mono font-bold text-gray-400 uppercase mb-2 block">Step 01</span>
+                    <h3 class="text-2xl font-bold mb-4"><span class="lang-en">Prepare Wallet</span><span class="lang-zh">準備錢包</span></h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        <span class="lang-en">Download and create Phantom wallet or other Solana-compatible wallet. Keep your seed phrase safe!</span>
+                        <span class="lang-zh">下載並創建 Phantom 錢包或其他支持 Solana 的錢包。請務必保存好您的助記詞！</span>
+                    </p>
+                    <a href="https://phantom.app/download" target="_blank" class="inline-flex items-center gap-2 text-sm font-bold border-b border-black pb-1 hover:text-gray-600 transition-colors">
+                        <span class="lang-en">Download Phantom</span><span class="lang-zh">下載 Phantom 錢包</span> &nearr;
+                    </a>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-8 border-l border-gray-200">
+                    <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-gray-300 rounded-full ring-4 ring-white"></span>
+                    <span class="text-xs font-mono font-bold text-gray-400 uppercase mb-2 block">Step 02</span>
+                    <h3 class="text-2xl font-bold mb-4"><span class="lang-en">Payment</span><span class="lang-zh">完成支付</span></h3>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 mb-6">
+                        <h4 class="font-bold text-sm mb-4 uppercase tracking-wider"><span class="lang-en">Option A: Fiat (Wise)</span><span class="lang-zh">方式 A: 法幣支付</span></h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="https://wise.com/pay/r/zF91psgm9CWOjHc" target="_blank" class="p-3 bg-white border border-gray-200 rounded hover:border-black text-center transition-colors">
+                                <div class="text-xs text-gray-400">USD</div>
+                                <div class="font-bold">$2,500</div>
+                            </a>
+                            <a href="https://wise.com/pay/r/Ax8qZLwr6gZcVlE" target="_blank" class="p-3 bg-white border border-gray-200 rounded hover:border-black text-center transition-colors">
+                                <div class="text-xs text-gray-400">HKD</div>
+                                <div class="font-bold">$19,500</div>
+                            </a>
+                            <a href="https://wise.com/pay/r/s2pKKoaeqQ6Scsk" target="_blank" class="p-3 bg-white border border-gray-200 rounded hover:border-black text-center transition-colors">
+                                <div class="text-xs text-gray-400">CNY</div>
+                                <div class="font-bold">¥17,800</div>
+                            </a>
+                            <a href="https://wise.com/pay/r/0id4ad2UT0bkljM" target="_blank" class="p-3 bg-white border border-gray-200 rounded hover:border-black text-center transition-colors">
+                                <div class="text-xs text-gray-400">JPY</div>
+                                <div class="font-bold">¥387,000</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-black text-white p-6 rounded-xl border border-gray-800">
+                        <h4 class="font-bold text-sm mb-4 uppercase tracking-wider text-gray-400"><span class="lang-en">Option B: Crypto</span><span class="lang-zh">方式 B: 加密貨幣</span></h4>
+                        <p class="text-sm mb-2"><span class="lang-en">Amount: 2,500 USDT/USDC</span><span class="lang-zh">金額: 2,500 USDT/USDC</span></p>
+                        <p class="text-xs text-gray-500"><span class="lang-en">Please use the addresses listed in the "Official Wallet" section above.</span><span class="lang-zh">請使用上方"官方錢包"板塊列出的地址。</span></p>
+                    </div>
+                    
+                    <div class="mt-4 flex items-center gap-2 text-xs font-bold text-red-500">
+                        <i class="fas fa-camera"></i>
+                        <span class="lang-en">Save payment screenshot!</span><span class="lang-zh">務必保存付款截圖！</span>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8 border-l border-gray-200">
+                    <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-gray-300 rounded-full ring-4 ring-white"></span>
+                    <span class="text-xs font-mono font-bold text-gray-400 uppercase mb-2 block">Step 03</span>
+                    <h3 class="text-2xl font-bold mb-4"><span class="lang-en">Send Email</span><span class="lang-zh">發送郵件</span></h3>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        <span class="lang-en">Send within 24 hours to: </span><span class="lang-zh">請在24小時內發送至: </span> <strong>genesis@aif.market</strong>
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2 list-disc pl-4">
+                        <li><span class="lang-en">Payment Screenshot</span><span class="lang-zh">付款截圖</span></li>
+                        <li><span class="lang-en">Your Solana Wallet Address</span><span class="lang-zh">您的 Solana 錢包地址</span></li>
+                        <li><span class="lang-en">Purchase Quantity (10,000 AIF)</span><span class="lang-zh">購買數量 (10,000 AIF)</span></li>
+                    </ul>
+                </div>
+
+                <!-- Step 4 - Enhanced Receipt Design -->
+                <div class="relative pl-8 border-l border-gray-200">
+                    <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-gray-300 rounded-full ring-4 ring-white"></span>
+                    <span class="text-xs font-mono font-bold text-gray-400 uppercase mb-2 block">Step 04</span>
+                    <h3 class="text-2xl font-bold mb-4"><span class="lang-en">Confirmation</span><span class="lang-zh">接收確認</span></h3>
+                    <p class="text-gray-600 mb-6 text-sm">
+                        <span class="lang-en">Within 48 hours, you will receive an official confirmation email and a secure digital receipt.</span>
+                        <span class="lang-zh">48小時內，您將收到官方確認郵件和安全數字收款憑證。</span>
+                    </p>
+                    
+                    <!-- Advanced Digital Receipt Visual -->
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-2xl relative group font-mono text-xs">
+                        <!-- Top Bar -->
+                        <div class="bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center">
+                             <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                <span class="font-bold text-gray-700">AIF-OFFICIAL-RECEIPT</span>
+                             </div>
+                             <span class="bg-black text-white px-2 py-0.5 rounded text-[10px]">ERC-20 / SPL</span>
+                        </div>
+
+                        <!-- Receipt Body -->
+                        <div class="p-6 md:p-8 receipt-bg relative">
+                            <!-- Background Watermark -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+                                <span class="text-9xl font-bold rotate-[-30deg]">CONFIRMED</span>
+                            </div>
+
+                            <!-- Header Info -->
+                            <div class="flex justify-between items-start mb-8">
+                                <div>
+                                    <h4 class="text-xl font-bold mb-1">PAYMENT RECEIPT</h4>
+                                    <p class="text-gray-500 text-[10px] uppercase">Transaction ID: <span class="text-black">5xG8...9jK2</span></p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold">$2,500.00</div>
+                                    <p class="text-gray-500 text-[10px]">PAID ON NOV 14, 2025</p>
+                                </div>
+                            </div>
+
+                            <!-- Detailed Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 mb-8">
+                                <div>
+                                    <p class="text-gray-400 text-[10px] uppercase mb-1">To (Official Wallet)</p>
+                                    <p class="font-bold break-all bg-gray-50 p-2 rounded border border-gray-100">3QBgQi...tSTLv</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-[10px] uppercase mb-1">From (Buyer)</p>
+                                    <p class="font-bold break-all bg-gray-50 p-2 rounded border border-gray-100">8yH2jK...m9Lp</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-[10px] uppercase mb-1">Token Quantity</p>
+                                    <p class="font-bold text-lg">10,000 AIF</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-[10px] uppercase mb-1">Block Height</p>
+                                    <p class="font-bold text-lg">#245,912,834</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-[10px] uppercase mb-1">Merkle Status</p>
+                                    <div class="flex items-center gap-2 font-bold text-green-600">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>VERIFIED & HASHED</span>
+                                    </div>
+                                </div>
+                                 <div>
+                                    <p class="text-gray-400 text-[10px] uppercase mb-1">Merkle Root</p>
+                                    <p class="font-mono text-[10px] text-gray-500 break-all">0x7d3a...f9b2</p>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="border-t border-gray-200 pt-6 flex justify-between items-end">
+                                <div>
+                                    <p class="text-[10px] text-gray-400">ISSUER SIGNATURE</p>
+                                    <p class="font-serif italic text-lg">AIF.Market</p>
+                                </div>
+                                <!-- Stamp -->
+                                <div class="w-24 h-24 border-4 border-red-500/80 text-red-500/80 rounded-full flex flex-col items-center justify-center font-bold transform -rotate-12 opacity-80 stamp-spin">
+                                    <span class="text-xs">OFFICIAL</span>
+                                    <span class="text-lg">PAID</span>
+                                    <span class="text-[8px]">NOV 14 2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 & 6 - Modified Dates -->
+                <div class="relative pl-8 border-l border-gray-200">
+                     <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-gray-300 rounded-full ring-4 ring-white"></span>
+                    <span class="text-xs font-mono font-bold text-gray-400 uppercase mb-2 block">Step 05 & 06</span>
+                    <h3 class="text-2xl font-bold mb-4"><span class="lang-en">Verify & Claim</span><span class="lang-zh">驗證與領取</span></h3>
+                    <div class="flex items-center gap-3 mb-4">
+                         <div class="px-3 py-1 bg-black text-white rounded text-xs font-bold uppercase">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span class="lang-en">Unlock Date: Mar 20, 2026</span><span class="lang-zh">解鎖日期: 2026年3月20日</span>
+                         </div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                        <span class="lang-en">Your address is written to the Merkle tree. Wait for the unlock date (Mar 20, 2026) to connect wallet and claim.</span>
+                        <span class="lang-zh">您的地址已被寫入 Merkle 樹。等待解鎖日期 (2026年3月20日) 連接錢包領取。</span>
+                    </p>
+                    <div class="p-4 bg-gray-50 rounded border border-gray-200">
+                         <h5 class="font-bold text-sm mb-2"><span class="lang-en">How to verify?</span><span class="lang-zh">如何驗證？</span></h5>
+                         <ul class="list-disc pl-4 text-xs text-gray-500 space-y-1">
+                             <li><span class="lang-en">Email confirmation received</span><span class="lang-zh">收到確認郵件</span></li>
+                             <li><span class="lang-en">Receipt shows "VERIFIED & HASHED"</span><span class="lang-zh">憑證顯示 "VERIFIED & HASHED"</span></li>
+                             <li><span class="lang-en">Check on official website</span><span class="lang-zh">官網查詢</span></li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Merkle Technology Section (Deep Dive & Explained) -->
+    <section id="verify" class="py-24 px-6 md:px-8 max-w-[1920px] mx-auto bg-black text-white border-t border-gray-800">
+        <!-- Section Header -->
+        <div class="mb-20 reveal-text">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                <span class="lang-en">The Merkle Proof <br>Technology.</span>
+                <span class="lang-zh">Merkle 默克爾樹 <br>證明技術詳解</span>
+            </h2>
+            <p class="text-gray-400 text-lg max-w-2xl leading-relaxed">
+                <span class="lang-en">We use Merkle Trees to cryptographically prove your inclusion in the distribution list without storing massive data on-chain. It is the gold standard for whitelist verification.</span>
+                <span class="lang-zh">我們使用默克爾樹（Merkle Tree）以密碼學方式證明您在分發列表中的資格，無需在鏈上存儲海量數據。這是白名單驗證的黃金標準。</span>
+            </p>
+        </div>
+
+        <!-- Merkle Visual & Principles -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start reveal-text delay-100 mb-20">
+            
+            <!-- Left: The Tree Diagram Visual -->
+            <div class="relative p-8 border border-gray-800 rounded-2xl bg-gray-900/50">
+                <div class="absolute top-4 right-4 text-xs font-mono text-gray-500">SIMPLIFIED MODEL</div>
+                
+                <!-- Level 1: Root -->
+                <div class="flex flex-col items-center mb-8">
+                    <div class="bg-green-500/20 text-green-400 border border-green-500/50 px-4 py-2 rounded-lg font-mono text-xs mb-2 shadow-[0_0_15px_rgba(74,222,128,0.2)]">
+                        <i class="fas fa-lock mr-2"></i>Merkle Root (On-Chain)
+                    </div>
+                    <div class="tree-line-vertical h-8"></div>
+                </div>
+
+                <!-- Level 2: Branches -->
+                <div class="flex justify-center gap-8 mb-8 relative">
+                     <!-- Horizontal Connector -->
+                     <div class="tree-line-horizontal w-1/2 absolute top-0"></div>
+                     
+                     <!-- Branch Left -->
+                     <div class="flex flex-col items-center pt-8 w-1/2">
+                         <div class="bg-gray-800 px-3 py-1 rounded text-[10px] font-mono mb-4 text-gray-400 border border-gray-700">Hash AB</div>
+                         <div class="tree-line-vertical h-6"></div>
+                         <div class="flex gap-2 mt-0 w-full justify-center">
+                             <!-- Connector for children -->
+                             <div class="tree-line-horizontal w-1/2 absolute mt-[-1px]"></div>
+                             <div class="flex flex-col items-center pt-4 mx-2">
+                                 <div class="w-16 h-10 bg-gray-800 border border-gray-700 rounded flex items-center justify-center text-[10px] font-mono text-gray-500">Hash A</div>
+                             </div>
+                             <div class="flex flex-col items-center pt-4 mx-2">
+                                <div class="w-16 h-10 bg-gray-800 border border-gray-700 rounded flex items-center justify-center text-[10px] font-mono text-gray-500">Hash B</div>
+                            </div>
+                         </div>
+                     </div>
+
+                     <!-- Branch Right (User Side) -->
+                     <div class="flex flex-col items-center pt-8 w-1/2">
+                        <div class="bg-gray-800 px-3 py-1 rounded text-[10px] font-mono mb-4 text-white border border-gray-600">Hash CD</div>
+                        <div class="tree-line-vertical h-6"></div>
+                        <div class="flex gap-2 mt-0 w-full justify-center relative">
+                            <!-- Connector for children -->
+                             <div class="tree-line-horizontal w-1/2 absolute top-0"></div>
+
+                            <div class="flex flex-col items-center pt-4 mx-2 group cursor-help">
+                                <div class="w-16 h-10 bg-white text-black font-bold rounded flex items-center justify-center text-[10px] font-mono relative z-10 shadow-lg scale-110">YOU</div>
+                                <div class="absolute -bottom-6 opacity-0 group-hover:opacity-100 transition-opacity text-[9px] text-green-400 whitespace-nowrap font-mono">Wallet+Amount</div>
+                            </div>
+                            <div class="flex flex-col items-center pt-4 mx-2">
+                               <div class="w-16 h-10 bg-gray-800 border border-gray-700 rounded flex items-center justify-center text-[10px] font-mono text-gray-500">Hash D</div>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12 pt-8 border-t border-gray-800">
+                    <p class="text-xs text-gray-400 max-w-md mx-auto leading-relaxed">
+                        <span class="lang-en">Your wallet address & amount (Leaf Node) are hashed up the tree. The final "Root" is stored on the Solana blockchain. To claim, you only need to provide the path (Proof).</span>
+                        <span class="lang-zh">您的錢包地址和數量（葉節點）經過層層哈希向上計算。最終的「根哈希」存儲在 Solana 區塊鏈上。領取時，您只需提供路徑（證明）。</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: Text Explanation Steps -->
+            <div class="space-y-12">
+                <div class="flex gap-6 group">
+                    <div class="w-12 h-12 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center flex-shrink-0 text-white font-bold text-xl font-mono group-hover:border-white group-hover:bg-white group-hover:text-black transition-all">1</div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">
+                            <span class="lang-en">Cryptographic Certainty</span>
+                            <span class="lang-zh">密碼學確定性</span>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            <span class="lang-en">A Merkle Tree works like a digital fingerprint. If even one byte of data (e.g., your token amount) changes, the Root Hash changes completely. Since the Root is locked on-chain, your data is impossible to tamper with.</span>
+                            <span class="lang-zh">默克爾樹就像數字指紋。如果任何一個字節的數據（例如您的代幣數量）發生變化，根哈希就會完全改變。由於根哈希已被鎖定在鏈上，您的數據不可能被篡改。</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 group">
+                    <div class="w-12 h-12 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center flex-shrink-0 text-white font-bold text-xl font-mono group-hover:border-white group-hover:bg-white group-hover:text-black transition-all">2</div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">
+                            <span class="lang-en">Privacy & Efficiency</span>
+                            <span class="lang-zh">隱私與效率</span>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            <span class="lang-en">Instead of publishing everyone's data publicly, we only store the Root. You only need to prove *your* branch to the smart contract to claim tokens, maintaining efficiency and privacy.</span>
+                            <span class="lang-zh">我們不公開發布所有人的數據，只存儲根哈希。您只需向智能合約證明*您的*分支即可領取代幣，既高效又保護隱私。</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 group">
+                    <div class="w-12 h-12 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center flex-shrink-0 text-white font-bold text-xl font-mono group-hover:border-white group-hover:bg-white group-hover:text-black transition-all">3</div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-white">
+                            <span class="lang-en">Trustless Verification</span>
+                            <span class="lang-zh">去信任化驗證</span>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            <span class="lang-en">The verification logic is executed by the Solana program, not a central server. Code is law. If the math matches, the funds are released.</span>
+                            <span class="lang-zh">驗證邏輯由 Solana 程序執行，而非中心化服務器。代碼即法律。只要數學計算匹配，資金就會自動釋放。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Original Core Features (Grid) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal-text">
+            <div class="border border-gray-800 p-8 rounded-2xl hover:bg-gray-900 transition-colors group">
+                <div class="text-3xl mb-4 text-gray-600 group-hover:text-green-500 transition-colors"><i class="fas fa-code-branch"></i></div>
+                <h3 class="text-lg font-bold mb-2"><span class="lang-en">Immutable</span><span class="lang-zh">不可篡改</span></h3>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <span class="lang-en">Once your wallet and amount are hashed into the Merkle tree, no one can modify it.</span>
+                    <span class="lang-zh">一旦您的錢包和數量被哈希到 Merkle 樹中，任何人都無法修改。</span>
+                </p>
+            </div>
+            
+            <div class="border border-gray-800 p-8 rounded-2xl hover:bg-gray-900 transition-colors group">
+                <div class="text-3xl mb-4 text-gray-600 group-hover:text-blue-500 transition-colors"><i class="fas fa-undo-alt"></i></div>
+                <h3 class="text-lg font-bold mb-2"><span class="lang-en">Non-revocable</span><span class="lang-zh">不可撤銷</span></h3>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <span class="lang-en">Official cannot revoke your rights, and you cannot cancel purchase.</span>
+                    <span class="lang-zh">官方無法撤銷您的權益，您也無法取消購買。</span>
+                </p>
+            </div>
+            
+            <div class="border border-gray-800 p-8 rounded-2xl hover:bg-gray-900 transition-colors group">
+                <div class="text-3xl mb-4 text-gray-600 group-hover:text-yellow-500 transition-colors"><i class="fas fa-robot"></i></div>
+                <h3 class="text-lg font-bold mb-2"><span class="lang-en">Auto-Execution</span><span class="lang-zh">自動執行</span></h3>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <span class="lang-en">Tokens automatically released to your wallet according to contract rules.</span>
+                    <span class="lang-zh">代幣將根據合約規則自動釋放到您的錢包。</span>
+                </p>
+            </div>
+
+            <div class="border border-gray-800 p-8 rounded-2xl hover:bg-gray-900 transition-colors group">
+                 <div class="text-3xl mb-4 text-gray-600 group-hover:text-purple-500 transition-colors"><i class="fas fa-handshake"></i></div>
+                <h3 class="text-lg font-bold mb-2"><span class="lang-en">Trustless</span><span class="lang-zh">去信任化</span></h3>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <span class="lang-en">Rely on code, not human operation. Eliminating human error risks.</span>
+                    <span class="lang-zh">依賴代碼而非人工操作。消除人為錯誤風險。</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 px-6 md:px-8 max-w-[1920px] mx-auto">
+        <h2 class="text-3xl font-bold mb-16 text-center reveal-text"><span class="lang-en">F.A.Q</span><span class="lang-zh">常見問題</span></h2>
+        
+        <div class="max-w-3xl mx-auto space-y-6 reveal-text">
+            <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <h4 class="font-bold text-lg mb-2 flex items-start gap-3">
+                    <span class="text-gray-300 font-mono">01</span>
+                    <span class="lang-en">What if I don't receive confirmation email?</span>
+                    <span class="lang-zh">如果我沒有收到確認郵件怎麼辦？</span>
+                </h4>
+                <p class="text-gray-500 text-sm pl-8">
+                    <span class="lang-en">Check spam first. If not received after 72 hours, email genesis@aif.market with "No confirmation received".</span>
+                    <span class="lang-zh">請先檢查垃圾郵箱。若72小時後仍未收到，請發郵件至 genesis@aif.market 標註"未收到確認"。</span>
+                </p>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <h4 class="font-bold text-lg mb-2 flex items-start gap-3">
+                    <span class="text-gray-300 font-mono">02</span>
+                    <span class="lang-en">Can I change wallet address?</span>
+                    <span class="lang-zh">我可以更改錢包地址嗎？</span>
+                </h4>
+                <p class="text-gray-500 text-sm pl-8">
+                    <span class="lang-en">No. Once added to Merkle library, it cannot be changed. Please double-check before sending email.</span>
+                    <span class="lang-zh">不行。一旦寫入 Merkle 庫無法更改。請在發送郵件前反覆確認。</span>
+                </p>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <h4 class="font-bold text-lg mb-2 flex items-start gap-3">
+                    <span class="text-gray-300 font-mono">03</span>
+                    <span class="lang-en">Will tokens be sent automatically?</span>
+                    <span class="lang-zh">代幣會自動發送到錢包嗎？</span>
+                </h4>
+                <p class="text-gray-500 text-sm pl-8">
+                    <span class="lang-en">No. You need to connect wallet to official website to CLAIM after unlock date.</span>
+                    <span class="lang-zh">不會。您需要在解鎖日期後連接錢包到官網手動點擊 CLAIM 領取。</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer - HKAIIFF Ecosystem -->
+    <footer class="bg-black text-white pt-24 pb-8 px-6 md:px-8 border-t border-gray-800">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="text-2xl font-bold font-mono mb-4">AIF MERKLE.</div>
+                    <p class="text-gray-400 text-sm max-w-xs leading-relaxed mb-6">
+                        <span class="lang-en">Protected by Solana. Secure, Transparent, Immutable.</span>
+                        <span class="lang-zh">Solana 區塊鏈保護。安全，透明，不可篡改。</span>
+                    </p>
+                    <a href="mailto:genesis@aif.market" class="text-lg font-bold hover:text-gray-300 transition-colors">genesis@aif.market</a>
+                </div>
+                
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Ecosystem</h4>
+                    <ul class="space-y-3 text-sm font-medium text-gray-300">
+                        <li><a href="http://www.hkaiiff.org" target="_blank" class="hover:text-white flex items-center gap-2"><i class="fas fa-film text-xs"></i> HKAIIFF Film Festival</a></li>
+                        <li><a href="http://www.aif.market" target="_blank" class="hover:text-white flex items-center gap-2"><i class="fas fa-store text-xs"></i> AIF Market</a></li>
+                        <li><a href="http://www.hkaifa.academy" target="_blank" class="hover:text-white flex items-center gap-2"><i class="fas fa-graduation-cap text-xs"></i> AI Film Academy</a></li>
+                        <li><a href="http://www.aif.center" target="_blank" class="hover:text-white flex items-center gap-2"><i class="fas fa-globe text-xs"></i> Global Submission</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Promises</h4>
+                    <ul class="space-y-3 text-sm font-medium text-gray-300">
+                        <li><span class="lang-en">✅ Reply within 48h</span><span class="lang-zh">✅ 48小時內回覆</span></li>
+                        <li><span class="lang-en">✅ Complete Receipts</span><span class="lang-zh">✅ 完整交易憑證</span></li>
+                        <li><span class="lang-en">✅ Merkle Verify</span><span class="lang-zh">✅ Merkle 驗證</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 flex justify-between items-end text-[10px] uppercase text-gray-500 font-mono">
+                <p>&copy; 2025 AIF Merkle Token Release Platform. All Rights Reserved.</p>
+                <p>Designed with HKAIIFF Aesthetics</p>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script>
-        // 语言切换 - 默认英文
-        let currentLang = 'en';
-        
+        // Language Toggle Logic
         function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
-            updateLanguage();
-        }
-        
-        function updateLanguage() {
-            // 移除所有active类
-            document.querySelectorAll('.lang-zh, .lang-en').forEach(el => {
-                el.classList.remove('active');
-            });
+            const body = document.body;
+            const currentLang = body.getAttribute('data-lang');
+            const newLang = currentLang === 'en' ? 'zh' : 'en';
+            body.setAttribute('data-lang', newLang);
             
-            // 添加active类到当前语言
-            document.querySelectorAll(currentLang === 'zh' ? '.lang-zh' : '.lang-en').forEach(el => {
-                el.classList.add('active');
-            });
-            
-            // 更新语言按钮显示
-            document.getElementById('lang-display').textContent = currentLang === 'zh' ? 'EN' : '中文';
+            // Persist preference (optional)
+            localStorage.setItem('aif-lang', newLang);
         }
 
-        // 复制Solana钱包地址
+        // Initialize Language from Storage or Default
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('aif-lang');
+            if (savedLang) {
+                document.body.setAttribute('data-lang', savedLang);
+            }
+        });
+
+        // Copy Functionality
+        async function copyText(text, labelEn, labelZh) {
+            try {
+                await navigator.clipboard.writeText(text);
+                const isZh = document.body.getAttribute('data-lang') === 'zh';
+                const msg = isZh ? (labelZh || '已複製!') : (labelEn || 'Copied!');
+                
+                // Create a temporary toast notification
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl z-50 transition-all duration-300 translate-y-10 opacity-0';
+                toast.innerText = msg;
+                document.body.appendChild(toast);
+                
+                // Animate in
+                requestAnimationFrame(() => {
+                    toast.classList.remove('translate-y-10', 'opacity-0');
+                });
+                
+                // Remove after 2s
+                setTimeout(() => {
+                    toast.classList.add('translate-y-10', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Failed to copy', err);
+            }
+        }
+
         function copySolanaWalletAddress() {
             const address = document.getElementById('solana-wallet-address').textContent;
-            navigator.clipboard.writeText(address).then(() => {
-                alert(currentLang === 'zh' ? 'Solana錢包地址已複製！' : 'Solana wallet address copied!');
-            });
+            copyText(address, 'Solana Address Copied!', 'Solana 地址已複製!');
         }
 
-        // 复制BSC钱包地址
         function copyBSCWalletAddress() {
             const address = document.getElementById('bsc-wallet-address').textContent;
-            navigator.clipboard.writeText(address).then(() => {
-                alert(currentLang === 'zh' ? 'BSC錢包地址已複製！' : 'BSC wallet address copied!');
-            });
+            copyText(address, 'BSC Address Copied!', 'BSC 地址已複製!');
         }
 
-        // 页面加载动画
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                document.body.style.transition = 'opacity 0.5s ease';
-                document.body.style.opacity = '1';
-            }, 100);
-            
-            // 确保默认语言正确显示
-            updateLanguage();
-        });
-
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Intersection Observer for Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
                 }
             });
-        });
-    </script>
+        }, { threshold: 0.1 });
 
+        document.querySelectorAll('.reveal-text').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
